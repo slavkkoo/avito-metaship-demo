@@ -429,16 +429,49 @@
             box-shadow: 0 2px 8px rgba(0, 170, 255, 0.3);
         }
 
-        /* Agreement */
-        .agreement {
-            text-align: center;
-            padding: 12px 16px 0;
-            font-size: 12px;
-            color: #8e8e93;
-            line-height: 1.4;
+        /* Agreement Checkbox */
+        .agreement-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #333;
         }
 
-        .agreement a {
+        .agreement-checkbox input {
+            display: none;
+        }
+
+        .checkbox-mark {
+            width: 22px;
+            height: 22px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            flex-shrink: 0;
+            position: relative;
+            transition: all 0.2s;
+        }
+
+        .agreement-checkbox input:checked + .checkbox-mark {
+            background: #00aaff;
+            border-color: #00aaff;
+        }
+
+        .agreement-checkbox input:checked + .checkbox-mark::after {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 7px;
+            width: 5px;
+            height: 10px;
+            border: solid #fff;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .agreement-checkbox a {
             color: #00aaff;
             text-decoration: none;
         }
@@ -555,10 +588,12 @@
                 <span class="price-value total" id="totalPrice">339 ₽</span>
             </div>
         </div>
+        <label class="agreement-checkbox">
+            <input type="checkbox" checked>
+            <span class="checkbox-mark"></span>
+            <span>С <a href="#">условиями отправки посылки</a> ознакомлен</span>
+        </label>
         <a href="pvz-8-success.html" class="submit-btn">Создать посылку</a>
-        <div class="agreement">
-            Нажимая «Создать посылку», вы соглашаетесь с <a href="#">условиями оферты</a> и <a href="#">политикой конфиденциальности</a>
-        </div>
     </div>
 
     <script>

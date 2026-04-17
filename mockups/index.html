@@ -1837,6 +1837,12 @@
                     .pvz-price-label.total { font-size: 16px; color: #333; font-weight: 600; }
                     .pvz-price-value { font-size: 14px; color: #333; }
                     .pvz-price-value.total { font-size: 22px; font-weight: 700; }
+                    .pvz-agreement { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; cursor: pointer; font-size: 14px; color: #333; }
+                    .pvz-agreement input { display: none; }
+                    .pvz-checkbox { width: 22px; height: 22px; border: 2px solid #ddd; border-radius: 6px; flex-shrink: 0; position: relative; transition: all 0.2s; }
+                    .pvz-agreement input:checked + .pvz-checkbox { background: #00aaff; border-color: #00aaff; }
+                    .pvz-agreement input:checked + .pvz-checkbox::after { content: ''; position: absolute; top: 4px; left: 7px; width: 5px; height: 10px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+                    .pvz-agreement a { color: #00aaff; text-decoration: none; }
                     .pvz-submit-btn { width: 100%; height: 56px; padding: 0 24px; background: linear-gradient(135deg, #00aaff 0%, #0095e0 100%); color: #fff; border: none; border-radius: 14px; font-size: 17px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(0, 170, 255, 0.3); display: flex; align-items: center; justify-content: center; }
                 </style>
 
@@ -1897,6 +1903,11 @@
                             <span class="pvz-price-value total">${total} ₽</span>
                         </div>
                     </div>
+                    <label class="pvz-agreement" onclick="this.querySelector('input').click()">
+                        <input type="checkbox" id="agreementCheck" checked>
+                        <span class="pvz-checkbox"></span>
+                        <span>С <a href="#" onclick="event.stopPropagation();">условиями отправки посылки</a> ознакомлен</span>
+                    </label>
                     <button class="pvz-submit-btn" onclick="pvzStep = 8; renderPvzStep();">Создать посылку</button>
                 </div>
             `;
