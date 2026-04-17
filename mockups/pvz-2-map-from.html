@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Avito — Выбор ПВЗ отправления</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #f2f2f2;
+            min-height: 100vh;
+            max-width: 430px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        /* Map Container */
+        .map-container {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 430px;
+            height: 100%;
+            background: #e8e4df;
+            background-image:
+                linear-gradient(rgba(200, 200, 200, 0.3) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(200, 200, 200, 0.3) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        /* Simulated map streets */
+        .map-streets {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .street {
+            position: absolute;
+            background: #fff;
+        }
+
+        .street.horizontal {
+            height: 8px;
+            border-radius: 4px;
+        }
+
+        .street.vertical {
+            width: 8px;
+            border-radius: 4px;
+        }
+
+        .street.main {
+            background: #f5f5f5;
+        }
+
+        /* Map Markers */
+        .marker {
+            position: absolute;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 11px;
+            color: #fff;
+            cursor: pointer;
+            transition: transform 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .marker:hover {
+            transform: scale(1.1);
+        }
+
+        .marker.selected {
+            transform: scale(1.2);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+        }
+
+        .marker.cdek {
+            background: linear-gradient(135deg, #00a651 0%, #00c853 100%);
+        }
+
+        .marker.pochta {
+            background: linear-gradient(135deg, #003087 0%, #0052cc 100%);
+        }
+
+        .marker.boxberry {
+            background: linear-gradient(135deg, #ff6b00 0%, #ff9500 100%);
+        }
+
+        .marker.fivepost {
+            background: linear-gradient(135deg, #6b8e23 0%, #7cb342 100%);
+        }
+
+        .marker.dpd {
+            background: linear-gradient(135deg, #dc0032 0%, #ff1744 100%);
+        }
+
+        .marker-cluster {
+            position: absolute;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #141414;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        /* Metro stations */
+        .metro-marker {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            color: #141414;
+            pointer-events: none;
+        }
+
+        .metro-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #cc0000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .metro-icon svg {
+            width: 14px;
+            height: 14px;
+            fill: #fff;
+        }
+
+        /* Header */
+        .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 10;
+            padding: 50px 12px 12px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 100%);
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 50px;
+            left: 12px;
+            width: 44px;
+            height: 44px;
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+            z-index: 20;
+        }
+
+        .back-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: #141414;
+        }
+
+        /* Controls */
+        .map-controls {
+            position: absolute;
+            top: 110px;
+            right: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .control-btn {
+            width: 44px;
+            height: 44px;
+            background: #fff;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+
+        .control-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: #141414;
+        }
+
+        /* Filter button */
+        .filter-btn {
+            position: absolute;
+            top: 110px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fff;
+            border-radius: 20px;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .filter-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: #141414;
+        }
+
+        .filter-btn span {
+            font-size: 15px;
+            font-weight: 500;
+            color: #141414;
+        }
+
+        /* Bottom Panel */
+        .bottom-panel {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #fff;
+            border-radius: 20px 20px 0 0;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+            z-index: 20;
+            transition: transform 0.3s ease;
+        }
+
+        .panel-handle {
+            width: 36px;
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            margin: 10px auto;
+        }
+
+        .panel-header {
+            padding: 0 20px 16px;
+        }
+
+        .panel-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #141414;
+            margin-bottom: 12px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            background: #f7f7f7;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .search-box svg {
+            width: 20px;
+            height: 20px;
+            fill: #8e8e93;
+        }
+
+        .search-box span {
+            font-size: 16px;
+            color: #8e8e93;
+        }
+
+        .search-box .arrow {
+            margin-left: auto;
+            fill: #c7c7cc;
+        }
+
+        /* PVZ List */
+        .pvz-list {
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 0 12px 12px;
+        }
+
+        .pvz-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px;
+            background: #fff;
+            border-radius: 14px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+            text-decoration: none;
+        }
+
+        .pvz-item:hover {
+            background: #f7f7f7;
+        }
+
+        .pvz-item.selected {
+            background: #f0f7ff;
+            border: 2px solid #00aaff;
+        }
+
+        .pvz-logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 10px;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .pvz-logo.cdek {
+            background: linear-gradient(135deg, #00a651 0%, #00c853 100%);
+        }
+
+        .pvz-logo.pochta {
+            background: linear-gradient(135deg, #003087 0%, #0052cc 100%);
+        }
+
+        .pvz-logo.boxberry {
+            background: linear-gradient(135deg, #ff6b00 0%, #ff9500 100%);
+        }
+
+        .pvz-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .pvz-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #141414;
+            margin-bottom: 2px;
+        }
+
+        .pvz-address {
+            font-size: 14px;
+            color: #8e8e93;
+            margin-bottom: 4px;
+        }
+
+        .pvz-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pvz-hours {
+            font-size: 12px;
+            color: #4caf50;
+            font-weight: 500;
+        }
+
+        .pvz-distance {
+            font-size: 12px;
+            color: #8e8e93;
+        }
+
+        /* Submit button */
+        .submit-section {
+            padding: 12px 20px;
+            padding-bottom: calc(12px + env(safe-area-inset-bottom));
+            border-top: 1px solid #f2f2f2;
+        }
+
+        .submit-btn {
+            width: 100%;
+            height: 56px;
+            padding: 0 24px;
+            background: #f5f5f5;
+            color: #999;
+            border: none;
+            border-radius: 14px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: not-allowed;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .submit-btn.active {
+            background: linear-gradient(135deg, #00aaff 0%, #0095e0 100%);
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 170, 255, 0.3);
+        }
+
+        .submit-btn.active:hover {
+            background: linear-gradient(135deg, #00bbff 0%, #00aaff 100%);
+            box-shadow: 0 6px 16px rgba(0, 170, 255, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .submit-btn.active:hover {
+            background: #0099ee;
+        }
+    </style>
+</head>
+<body>
+    <!-- Map Container -->
+    <div class="map-container">
+        <!-- Simulated streets -->
+        <div class="map-streets">
+            <div class="street horizontal main" style="top: 30%; left: 0; width: 100%;"></div>
+            <div class="street horizontal" style="top: 50%; left: 10%; width: 80%;"></div>
+            <div class="street horizontal" style="top: 70%; left: 5%; width: 90%;"></div>
+            <div class="street vertical main" style="left: 40%; top: 0; height: 100%;"></div>
+            <div class="street vertical" style="left: 20%; top: 20%; height: 60%;"></div>
+            <div class="street vertical" style="left: 70%; top: 10%; height: 80%;"></div>
+        </div>
+
+        <!-- Markers -->
+        <div class="marker cdek" style="top: 25%; left: 30%;" onclick="selectPvz(this, 'cdek1')">СДЭК</div>
+        <div class="marker pochta" style="top: 35%; left: 55%;" onclick="selectPvz(this, 'pochta1')">Почта</div>
+        <div class="marker boxberry" style="top: 45%; left: 25%;" onclick="selectPvz(this, 'boxberry1')">BB</div>
+        <div class="marker cdek" style="top: 55%; left: 65%;" onclick="selectPvz(this, 'cdek2')">СДЭК</div>
+        <div class="marker fivepost" style="top: 40%; left: 75%;" onclick="selectPvz(this, '5post1')">5Post</div>
+        <div class="marker dpd" style="top: 60%; left: 40%;" onclick="selectPvz(this, 'dpd1')">DPD</div>
+        <div class="marker-cluster" style="top: 30%; left: 85%;">3</div>
+        <div class="marker-cluster" style="top: 65%; left: 15%;">2</div>
+
+        <!-- Metro markers -->
+        <div class="metro-marker" style="top: 48%; left: 42%;">
+            <div class="metro-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 2L4 12h3v8h10v-8h3L12 2z"/></svg>
+            </div>
+            <span>Савёловская</span>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <a href="pvz-1-main.html" class="back-btn">
+        <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+    </a>
+
+    <!-- Filter button -->
+    <div class="filter-btn">
+        <svg viewBox="0 0 24 24"><path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/></svg>
+        <span>Фильтры</span>
+    </div>
+
+    <!-- Map Controls -->
+    <div class="map-controls">
+        <div class="control-btn">
+            <svg viewBox="0 0 24 24"><path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3c-.46-4.17-3.77-7.48-7.94-7.94V1h-2v2.06C6.83 3.52 3.52 6.83 3.06 11H1v2h2.06c.46 4.17 3.77 7.48 7.94 7.94V23h2v-2.06c4.17-.46 7.48-3.77 7.94-7.94H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>
+        </div>
+    </div>
+
+    <!-- Bottom Panel -->
+    <div class="bottom-panel">
+        <div class="panel-handle"></div>
+
+        <div class="panel-header">
+            <div class="panel-title">Откуда отправить</div>
+            <div class="search-box">
+                <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5z"/></svg>
+                <span>Поиск по адресам</span>
+                <svg class="arrow" viewBox="0 0 24 24" width="20" height="20"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+            </div>
+        </div>
+
+        <div class="pvz-list">
+            <a href="pvz-3-sender.html" class="pvz-item" id="cdek1" onclick="selectPvzItem(event, this)">
+                <div class="pvz-logo cdek">СДЭК</div>
+                <div class="pvz-content">
+                    <div class="pvz-name">СДЭК</div>
+                    <div class="pvz-address">ул. Складочная, 1 стр. 5</div>
+                    <div class="pvz-meta">
+                        <span class="pvz-hours">Открыто до 21:00</span>
+                        <span class="pvz-distance">350 м</span>
+                    </div>
+                </div>
+            </a>
+
+            <a href="pvz-3-sender.html" class="pvz-item" id="pochta1" onclick="selectPvzItem(event, this)">
+                <div class="pvz-logo pochta">Почта</div>
+                <div class="pvz-content">
+                    <div class="pvz-name">Почта России</div>
+                    <div class="pvz-address">ул. Сущёвский Вал, 14</div>
+                    <div class="pvz-meta">
+                        <span class="pvz-hours">Открыто до 20:00</span>
+                        <span class="pvz-distance">520 м</span>
+                    </div>
+                </div>
+            </a>
+
+            <a href="pvz-3-sender.html" class="pvz-item" id="boxberry1" onclick="selectPvzItem(event, this)">
+                <div class="pvz-logo boxberry">BB</div>
+                <div class="pvz-content">
+                    <div class="pvz-name">Boxberry</div>
+                    <div class="pvz-address">Бутырская ул., 77</div>
+                    <div class="pvz-meta">
+                        <span class="pvz-hours">Открыто до 22:00</span>
+                        <span class="pvz-distance">780 м</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="submit-section">
+            <a href="#" class="submit-btn" id="submitBtn">Готово</a>
+        </div>
+    </div>
+
+    <script>
+        let selectedPvz = null;
+        let selectedMarker = null;
+
+        function selectPvz(marker, pvzId) {
+            // Remove selection from previous marker
+            if (selectedMarker) {
+                selectedMarker.classList.remove('selected');
+            }
+
+            // Select new marker
+            marker.classList.add('selected');
+            selectedMarker = marker;
+
+            // Find and select corresponding list item
+            const pvzItem = document.getElementById(pvzId);
+            if (pvzItem) {
+                selectPvzItem(null, pvzItem);
+            }
+        }
+
+        function selectPvzItem(event, item) {
+            if (event) {
+                event.preventDefault();
+            }
+
+            // Remove selection from all items
+            document.querySelectorAll('.pvz-item').forEach(el => {
+                el.classList.remove('selected');
+            });
+
+            // Select this item
+            item.classList.add('selected');
+            selectedPvz = item;
+
+            // Activate submit button
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.classList.add('active');
+            submitBtn.href = 'pvz-3-sender.html';
+        }
+    </script>
+</body>
+</html>

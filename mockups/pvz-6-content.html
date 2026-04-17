@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Avito — Что внутри</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #f2f2f2;
+            min-height: 100vh;
+            max-width: 430px;
+            margin: 0 auto;
+            padding-bottom: 100px;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 20px;
+            font-size: 15px;
+            font-weight: 600;
+            background: #fff;
+        }
+
+        .status-icons {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        /* Header */
+        .header {
+            background: #fff;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .back-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .back-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: #141414;
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #141414;
+        }
+
+        /* Section */
+        .section {
+            background: #fff;
+            margin: 12px;
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .section-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f3e5f5;
+        }
+
+        .section-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: #9c27b0;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #141414;
+        }
+
+        /* Categories */
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .category {
+            padding: 12px 16px;
+            background: #f7f7f7;
+            border-radius: 12px;
+            font-size: 15px;
+            color: #141414;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .category:hover {
+            background: #f0f0f0;
+        }
+
+        .category.selected {
+            background: #e3f2fd;
+            border-color: #00aaff;
+            color: #00aaff;
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-label {
+            font-size: 13px;
+            color: #8e8e93;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .form-label .required {
+            color: #ff3b30;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            background: #f7f7f7;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            font-size: 16px;
+            color: #141414;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            background: #fff;
+            border-color: #00aaff;
+        }
+
+        .form-input::placeholder {
+            color: #c7c7cc;
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: none;
+        }
+
+        /* Hint */
+        .form-hint {
+            font-size: 13px;
+            color: #8e8e93;
+            margin-top: 8px;
+        }
+
+        /* Value Input */
+        .value-section {
+            background: #fff;
+            margin: 12px;
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .value-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .value-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
+        }
+
+        .value-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: #fff;
+        }
+
+        .value-title-section {
+            flex: 1;
+        }
+
+        .value-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #141414;
+        }
+
+        .value-subtitle {
+            font-size: 13px;
+            color: #8e8e93;
+        }
+
+        .value-input-wrapper {
+            display: flex;
+            align-items: center;
+            background: #f7f7f7;
+            border-radius: 12px;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .value-input-wrapper:focus-within {
+            background: #fff;
+            border-color: #00aaff;
+        }
+
+        .value-input {
+            flex: 1;
+            padding: 14px 16px;
+            background: transparent;
+            border: none;
+            font-size: 16px;
+            color: #141414;
+        }
+
+        .value-input:focus {
+            outline: none;
+        }
+
+        .value-input::placeholder {
+            color: #c7c7cc;
+        }
+
+        .value-suffix {
+            padding: 14px 16px 14px 0;
+            font-size: 16px;
+            color: #8e8e93;
+        }
+
+        /* Quick values */
+        .quick-values {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .quick-value {
+            padding: 8px 14px;
+            background: #f7f7f7;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #141414;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .quick-value:hover {
+            background: #f0f0f0;
+        }
+
+        /* Warning */
+        .warning {
+            background: #fff3e0;
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .warning svg {
+            width: 20px;
+            height: 20px;
+            fill: #ff9800;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .warning-text {
+            font-size: 14px;
+            color: #141414;
+            line-height: 1.4;
+        }
+
+        /* Bottom Bar */
+        .bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 430px;
+            background: #fff;
+            padding: 12px 16px;
+            padding-bottom: calc(12px + env(safe-area-inset-bottom));
+            box-shadow: 0 -2px 20px rgba(0,0,0,0.08);
+            z-index: 100;
+        }
+
+        .submit-btn {
+            width: 100%;
+            height: 56px;
+            padding: 0 24px;
+            background: linear-gradient(135deg, #00aaff 0%, #0095e0 100%);
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 170, 255, 0.3);
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #00bbff 0%, #00aaff 100%);
+            box-shadow: 0 6px 16px rgba(0, 170, 255, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(0, 170, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- Status Bar -->
+    <div class="status-bar">
+        <span>16:07</span>
+        <div class="status-icons">
+            <svg width="18" height="12" viewBox="0 0 18 12"><path d="M1 4h2v8H1V4zm4-2h2v10H5V2zm4-2h2v12H9V0zm4 4h2v8h-2V4zm4-2h2v10h-2V2z" fill="#141414"/></svg>
+            <svg width="17" height="12" viewBox="0 0 17 12"><path d="M8.5 2.5c2.7 0 5.2 1 7.1 2.7l-1.4 1.4c-1.5-1.3-3.5-2.1-5.7-2.1s-4.2.8-5.7 2.1L1.4 5.2c1.9-1.7 4.4-2.7 7.1-2.7z" fill="#141414"/></svg>
+            <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0" y="1" width="22" height="10" rx="2" stroke="#141414" stroke-width="1" fill="none"/><rect x="23" y="4" width="2" height="4" rx="1" fill="#141414"/><rect x="2" y="3" width="14" height="6" rx="1" fill="#141414"/></svg>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+        <a href="pvz-5-recipient.html" class="back-btn">
+            <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        </a>
+        <div class="header-title">Что внутри</div>
+    </div>
+
+    <!-- Content Section -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-icon">
+                <svg viewBox="0 0 24 24"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18-.21 0-.41-.06-.57-.18l-7.9-4.44A.991.991 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18.21 0 .41.06.57.18l7.9 4.44c.32.17.53.5.53.88v9z"/></svg>
+            </div>
+            <div class="section-title">Категория товара</div>
+        </div>
+
+        <div class="categories">
+            <div class="category" onclick="selectCategory(this)">Одежда</div>
+            <div class="category" onclick="selectCategory(this)">Обувь</div>
+            <div class="category selected" onclick="selectCategory(this)">Электроника</div>
+            <div class="category" onclick="selectCategory(this)">Косметика</div>
+            <div class="category" onclick="selectCategory(this)">Книги</div>
+            <div class="category" onclick="selectCategory(this)">Документы</div>
+            <div class="category" onclick="selectCategory(this)">Продукты</div>
+            <div class="category" onclick="selectCategory(this)">Другое</div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Описание содержимого <span class="required">*</span></label>
+            <textarea class="form-input form-textarea" placeholder="Опишите, что отправляете">Смартфон iPhone 13 Pro</textarea>
+            <div class="form-hint">Это поможет при страховом случае</div>
+        </div>
+    </div>
+
+    <!-- Value Section -->
+    <div class="value-section">
+        <div class="value-header">
+            <div class="value-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+            </div>
+            <div class="value-title-section">
+                <div class="value-title">Оценочная стоимость</div>
+                <div class="value-subtitle">Для расчёта страховки</div>
+            </div>
+        </div>
+
+        <div class="value-input-wrapper">
+            <input type="number" class="value-input" id="valueInput" placeholder="0" value="85000">
+            <span class="value-suffix">₽</span>
+        </div>
+
+        <div class="quick-values">
+            <div class="quick-value" onclick="setValue(5000)">5 000 ₽</div>
+            <div class="quick-value" onclick="setValue(10000)">10 000 ₽</div>
+            <div class="quick-value" onclick="setValue(50000)">50 000 ₽</div>
+            <div class="quick-value" onclick="setValue(100000)">100 000 ₽</div>
+        </div>
+    </div>
+
+    <!-- Warning -->
+    <div class="warning">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+        <div class="warning-text">
+            Убедитесь, что товар не входит в список запрещённых к отправке. Электроника должна быть выключена и надёжно упакована.
+        </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="bottom-bar">
+        <a href="pvz-7-confirm.html" class="submit-btn">Готово</a>
+    </div>
+
+    <script>
+        function selectCategory(el) {
+            document.querySelectorAll('.category').forEach(cat => {
+                cat.classList.remove('selected');
+            });
+            el.classList.add('selected');
+        }
+
+        function setValue(value) {
+            document.getElementById('valueInput').value = value;
+        }
+    </script>
+</body>
+</html>

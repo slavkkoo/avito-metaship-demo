@@ -1,0 +1,1971 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Avito — Доставка</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #fff;
+            min-height: 100vh;
+            max-width: 430px;
+            margin: 0 auto;
+            overflow-x: hidden;
+        }
+
+        /* ============ NATIVE AVITO SCREEN ============ */
+        .native-screen {
+            min-height: 100vh;
+            background: #fff;
+        }
+
+        /* iOS Status Bar simulation */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 20px;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .status-time { }
+        .status-icons {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        /* Search Header */
+        .search-header {
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .back-arrow {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-arrow svg {
+            width: 20px;
+            height: 20px;
+            fill: #333;
+        }
+
+        .search-input {
+            flex: 1;
+            background: #f2f2f2;
+            border-radius: 10px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #8e8e93;
+            font-size: 17px;
+        }
+
+        .search-input svg {
+            width: 20px;
+            height: 20px;
+            fill: #8e8e93;
+        }
+
+        /* Location row */
+        .location-row {
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .location {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 15px;
+            color: #333;
+        }
+
+        .location svg {
+            width: 18px;
+            height: 18px;
+            fill: #333;
+        }
+
+        .location span {
+            color: #8e8e93;
+        }
+
+        .filters-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 15px;
+            color: #333;
+        }
+
+        .filters-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: #333;
+        }
+
+        /* Tags row */
+        .tags-row {
+            padding: 0 16px 12px;
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .tags-row::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tag {
+            flex-shrink: 0;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-size: 15px;
+            white-space: nowrap;
+        }
+
+        .tag.active {
+            background: #333;
+            color: #fff;
+        }
+
+        .tag.inactive {
+            background: #f2f2f2;
+            color: #333;
+        }
+
+        /* Sort row */
+        .sort-row {
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #f2f2f2;
+        }
+
+        .sort-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 15px;
+            color: #333;
+        }
+
+        .notify-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 15px;
+            color: #333;
+        }
+
+        /* Calculator Card */
+        .calc-card {
+            margin: 16px;
+            padding: 20px;
+            background: #f7f7f7;
+            border-radius: 16px;
+        }
+
+        .calc-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #333;
+            line-height: 1.3;
+            margin-bottom: 20px;
+        }
+
+        .calc-dropdown {
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            cursor: pointer;
+        }
+
+        .calc-dropdown span {
+            font-size: 17px;
+            color: #333;
+        }
+
+        .calc-dropdown svg {
+            width: 20px;
+            height: 20px;
+            fill: #333;
+        }
+
+        .calc-fields {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .calc-field {
+            flex: 1;
+            background: #fff;
+            border-radius: 12px;
+            padding: 14px 16px;
+            font-size: 17px;
+            color: #8e8e93;
+            cursor: pointer;
+        }
+
+        .calc-field.filled {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .calc-field-label {
+            font-size: 12px;
+            color: #8e8e93;
+        }
+
+        .calc-field-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* Delivery Options */
+        .delivery-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .delivery-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #fff;
+            border-radius: 14px;
+            padding: 14px 16px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .delivery-option:hover {
+            background: #fafafa;
+        }
+
+        .delivery-option.selected {
+            border-color: #00aaff;
+            background: #f0f9ff;
+        }
+
+        .delivery-option-logo {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 11px;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .delivery-option-logo.pochta { background: #005baa; }
+        .delivery-option-logo.cdek { background: #00a651; }
+        .delivery-option-logo.yandex { background: #ffcc00; color: #000; font-size: 18px; }
+
+        .delivery-option-info {
+            flex: 1;
+        }
+
+        .delivery-option-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .delivery-option-time {
+            font-size: 13px;
+            color: #8e8e93;
+            margin-top: 2px;
+        }
+
+        .delivery-option-price {
+            font-size: 16px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .delivery-option-check {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid #ddd;
+            flex-shrink: 0;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .delivery-option.selected .delivery-option-check {
+            border-color: #00aaff;
+            background: #00aaff;
+        }
+
+        .delivery-option.selected .delivery-option-check::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            background: #fff;
+            border-radius: 50%;
+        }
+
+        .calc-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .calc-toggle span {
+            font-size: 17px;
+            color: #333;
+        }
+
+        .toggle {
+            width: 51px;
+            height: 31px;
+            background: #e9e9eb;
+            border-radius: 16px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .toggle.active {
+            background: #333;
+        }
+
+        .toggle::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 27px;
+            height: 27px;
+            background: #fff;
+            border-radius: 50%;
+            transition: transform 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .toggle.active::after {
+            transform: translateX(20px);
+        }
+
+        .calc-price-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 15px;
+            color: #8e8e93;
+            margin-bottom: 8px;
+        }
+
+        .calc-price-label svg {
+            width: 16px;
+            height: 16px;
+            fill: #8e8e93;
+        }
+
+        .calc-price {
+            font-size: 24px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .calc-price span {
+            color: #8e8e93;
+        }
+
+        .calc-btn {
+            height: 56px;
+            background: linear-gradient(135deg, #00aaff 0%, #0095e0 100%);
+            border: none;
+            border-radius: 14px;
+            padding: 0 24px;
+            font-size: 17px;
+            font-weight: 600;
+            color: #fff;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0, 170, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .calc-btn:hover {
+            background: linear-gradient(135deg, #00bbff 0%, #00aaff 100%);
+            box-shadow: 0 6px 16px rgba(0, 170, 255, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .calc-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(0, 170, 255, 0.3);
+        }
+
+        /* Dropdown menu */
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            margin-top: 8px;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .dropdown-menu.active {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+            border-bottom: 1px solid #f2f2f2;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item:hover {
+            background: #f7f7f7;
+        }
+
+        .dropdown-item.selected {
+            background: #f0f7ff;
+        }
+
+        .dropdown-item-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dropdown-item-icon.courier {
+            background: #e3f2fd;
+        }
+
+        .dropdown-item-icon.courier svg {
+            fill: #2196f3;
+        }
+
+        .dropdown-item-icon.pvz {
+            background: #fff3e0;
+        }
+
+        .dropdown-item-icon.pvz svg {
+            fill: #ff9800;
+        }
+
+        .dropdown-item-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .dropdown-item-text {
+            flex: 1;
+        }
+
+        .dropdown-item-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .dropdown-item-desc {
+            font-size: 13px;
+            color: #8e8e93;
+            margin-top: 2px;
+        }
+
+        .dropdown-check {
+            width: 24px;
+            height: 24px;
+            fill: #00aaff;
+            opacity: 0;
+        }
+
+        .dropdown-item.selected .dropdown-check {
+            opacity: 1;
+        }
+
+        .calc-dropdown-wrapper {
+            position: relative;
+        }
+
+        /* Content area */
+        .content-padding {
+            padding-bottom: 90px;
+        }
+
+        /* Avito Tab Bar */
+        .avito-tabs {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 430px;
+            height: 65px;
+            background: #fff;
+            border-top: 1px solid #e5e5e5;
+            display: flex;
+            padding-bottom: env(safe-area-inset-bottom);
+            z-index: 50;
+        }
+
+        .avito-tab {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            color: #8e8e93;
+            font-size: 10px;
+            position: relative;
+        }
+
+        .avito-tab.active { color: #ff4053; }
+        .avito-tab svg { width: 26px; height: 26px; fill: currentColor; }
+
+        .tab-badge {
+            position: absolute;
+            top: 4px;
+            right: calc(50% - 20px);
+            background: #ff4053;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 600;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 5px;
+        }
+
+        /* ============ WEBVIEW OVERLAY ============ */
+        .webview-overlay {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 430px;
+            height: 100%;
+            z-index: 100;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .webview-overlay.active {
+            pointer-events: auto;
+            opacity: 1;
+        }
+
+        .webview-backdrop {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+        }
+
+        .webview-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 95%;
+            background: #fff;
+            border-radius: 12px 12px 0 0;
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .webview-overlay.active .webview-container {
+            transform: translateY(0);
+        }
+
+        .webview-handle {
+            width: 36px;
+            height: 5px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            margin: 8px auto;
+        }
+
+        /* WebView Header */
+        .webview-header {
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid #f2f2f2;
+        }
+
+        .close-btn {
+            width: 32px;
+            height: 32px;
+            background: #f2f2f2;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+        }
+
+        .close-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: #333;
+        }
+
+        .webview-title {
+            flex: 1;
+            font-size: 17px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* Loading */
+        .loading-indicator {
+            height: 2px;
+            background: #f2f2f2;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loading-indicator::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 30%;
+            height: 100%;
+            background: #333;
+            animation: loading 1s ease-in-out infinite;
+        }
+
+        .loading-indicator.done::after {
+            display: none;
+        }
+
+        @keyframes loading {
+            0% { left: -30%; }
+            100% { left: 100%; }
+        }
+
+        /* WebView Content */
+        .webview-content {
+            flex: 1;
+            overflow-y: auto;
+            background: #fff;
+        }
+
+        .loading-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 300px;
+            color: #8e8e93;
+        }
+
+        .spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid #f2f2f2;
+            border-top-color: #333;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 12px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Delivery Form in WebView */
+        .delivery-form {
+            padding: 20px 16px;
+        }
+
+        .form-section {
+            margin-bottom: 24px;
+        }
+
+        .form-section-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #8e8e93;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .form-card {
+            background: #f7f7f7;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .form-row {
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .form-row:last-child {
+            border-bottom: none;
+        }
+
+        .form-row-icon {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .form-row-icon.green { background: #34c759; }
+        .form-row-icon.orange { background: #ff9500; }
+
+        .form-row-input {
+            flex: 1;
+            font-size: 17px;
+            color: #333;
+            background: transparent;
+            border: none;
+            outline: none;
+        }
+
+        .form-row-input::placeholder {
+            color: #8e8e93;
+        }
+
+        /* Offers list */
+        .offers-section {
+            padding: 0 16px 20px;
+        }
+
+        .offers-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #8e8e93;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .offer-item {
+            background: #f7f7f7;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .offer-item.selected {
+            background: #fff;
+            border: 2px solid #333;
+        }
+
+        .offer-logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 10px;
+            color: #fff;
+        }
+
+        .offer-logo.cdek { background: #00a651; }
+        .offer-logo.pochta { background: #005baa; }
+        .offer-logo.dpd { background: #dc0032; }
+
+        .offer-info { flex: 1; }
+        .offer-name { font-size: 17px; font-weight: 600; color: #333; }
+        .offer-desc { font-size: 15px; color: #8e8e93; margin-top: 2px; }
+
+        .offer-price { text-align: right; }
+        .offer-price-value { font-size: 17px; font-weight: 700; color: #333; }
+        .offer-price-time { font-size: 13px; color: #8e8e93; }
+
+        .offer-badge {
+            display: inline-block;
+            background: #e8f5e9;
+            color: #34c759;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        /* Submit button */
+        .submit-section {
+            padding: 16px;
+            border-top: 1px solid #f2f2f2;
+            background: #fff;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: #333;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .submit-btn:active {
+            background: #1a1a1a;
+        }
+    </style>
+</head>
+<body>
+    <!-- ============ NATIVE AVITO SCREEN ============ -->
+    <div class="native-screen">
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <span class="status-time">16:14</span>
+            <div class="status-icons">
+                <svg width="18" height="12" viewBox="0 0 18 12"><path d="M1 4h2v8H1V4zm4-2h2v10H5V2zm4-2h2v12H9V0zm4 4h2v8h-2V4zm4-2h2v10h-2V2z" fill="#333"/></svg>
+                <svg width="17" height="12" viewBox="0 0 17 12"><path d="M8.5 2.5c2.7 0 5.2 1 7.1 2.7l-1.4 1.4c-1.5-1.3-3.5-2.1-5.7-2.1s-4.2.8-5.7 2.1L1.4 5.2c1.9-1.7 4.4-2.7 7.1-2.7zm0 3c1.8 0 3.5.7 4.8 1.8l-1.4 1.4c-.9-.8-2.1-1.2-3.4-1.2s-2.5.4-3.4 1.2L3.7 7.3c1.3-1.1 3-1.8 4.8-1.8zm0 3c1 0 1.9.4 2.6 1l-2.6 2.5-2.6-2.5c.7-.6 1.6-1 2.6-1z" fill="#333"/></svg>
+                <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0" y="1" width="22" height="10" rx="2" stroke="#333" stroke-width="1" fill="none"/><rect x="23" y="4" width="2" height="4" rx="1" fill="#333"/><rect x="2" y="3" width="14" height="6" rx="1" fill="#333"/></svg>
+            </div>
+        </div>
+
+        <!-- Search Header -->
+        <div class="search-header">
+            <div class="back-arrow">
+                <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+            </div>
+            <div class="search-input">
+                <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5z"/></svg>
+                <span>Поиск</span>
+            </div>
+        </div>
+
+        <!-- Location -->
+        <div class="location-row">
+            <div class="location">
+                <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                <strong>Москва,</strong>
+                <span>район, метро, радиус</span>
+            </div>
+            <div class="filters-btn">
+                <svg viewBox="0 0 24 24"><path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/></svg>
+                <span>Фильтры</span>
+            </div>
+        </div>
+
+        <!-- Tags -->
+        <div class="tags-row">
+            <div class="tag active">
+                <span>📦 Перевозки и доставка</span>
+            </div>
+            <div class="tag inactive">
+                <span>Когда нужна услуга ▾</span>
+            </div>
+            <div class="tag inactive">
+                <span>Чем заплатить</span>
+            </div>
+        </div>
+
+        <!-- Sort row -->
+        <div class="sort-row">
+            <div class="sort-btn">
+                <span>↕ Сортировка</span>
+            </div>
+            <div class="notify-btn">
+                <span>🔔 Уведомлять о новых</span>
+            </div>
+        </div>
+
+        <div class="content-padding">
+            <!-- Calculator Card -->
+            <div class="calc-card">
+                <div class="calc-title">Рассчитайте стоимость задачи и выбирайте из подходящих</div>
+
+                <div class="calc-dropdown-wrapper">
+                    <div class="calc-dropdown" onclick="toggleDropdown()">
+                        <span id="selectedDeliveryType">Доставить курьером</span>
+                        <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+                    </div>
+                    <div class="dropdown-menu" id="dropdownMenu">
+                        <div class="dropdown-item selected" onclick="selectDeliveryType('courier', 'Доставить курьером')">
+                            <div class="dropdown-item-icon courier">
+                                <svg viewBox="0 0 24 24"><path d="M18 18.5c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5-1.5.67-1.5 1.5.67 1.5 1.5 1.5zM19.5 9.5l1.96 2.5H17V9.5h2.5zM6 18.5c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5-1.5.67-1.5 1.5.67 1.5 1.5 1.5zM20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4z"/></svg>
+                            </div>
+                            <div class="dropdown-item-text">
+                                <div class="dropdown-item-title">Доставить курьером</div>
+                                <div class="dropdown-item-desc">СДЭК, DPD, Почта России</div>
+                            </div>
+                            <svg class="dropdown-check" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        </div>
+                        <div class="dropdown-item" onclick="selectDeliveryType('pvz', 'Доставка в пункты выдачи')">
+                            <div class="dropdown-item-icon pvz">
+                                <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                            </div>
+                            <div class="dropdown-item-text">
+                                <div class="dropdown-item-title">Доставка в пункты выдачи</div>
+                                <div class="dropdown-item-desc">Из ПВЗ в ПВЗ по всей России</div>
+                            </div>
+                            <svg class="dropdown-check" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="calc-fields">
+                    <div class="calc-field filled">
+                        <span class="calc-field-label">Откуда</span>
+                        <span class="calc-field-value">Москва</span>
+                    </div>
+                    <div class="calc-field filled">
+                        <span class="calc-field-label">Куда</span>
+                        <span class="calc-field-value">Мурманск</span>
+                    </div>
+                </div>
+
+                <div class="delivery-options" id="deliveryOptions" style="display: none;">
+                    <div class="delivery-option" onclick="selectDeliveryOption(this, 'pochta')">
+                        <div class="delivery-option-logo pochta">ПР</div>
+                        <div class="delivery-option-info">
+                            <div class="delivery-option-name">Почта России</div>
+                            <div class="delivery-option-time">5-7 дней</div>
+                        </div>
+                        <div class="delivery-option-price">от 200 ₽</div>
+                        <div class="delivery-option-check"></div>
+                    </div>
+                    <div class="delivery-option selected" onclick="selectDeliveryOption(this, 'cdek')">
+                        <div class="delivery-option-logo cdek">СДЭК</div>
+                        <div class="delivery-option-info">
+                            <div class="delivery-option-name">СДЭК</div>
+                            <div class="delivery-option-time">3-4 дня</div>
+                        </div>
+                        <div class="delivery-option-price">от 250 ₽</div>
+                        <div class="delivery-option-check"></div>
+                    </div>
+                    <div class="delivery-option" onclick="selectDeliveryOption(this, 'yandex')">
+                        <div class="delivery-option-logo yandex">Я</div>
+                        <div class="delivery-option-info">
+                            <div class="delivery-option-name">Яндекс Доставка</div>
+                            <div class="delivery-option-time">2-3 дня</div>
+                        </div>
+                        <div class="delivery-option-price">от 230 ₽</div>
+                        <div class="delivery-option-check"></div>
+                    </div>
+                </div>
+
+                <div class="calc-btn" id="mainActionBtn" onclick="handleMainAction()">Смотреть предложения</div>
+            </div>
+        </div>
+
+        <!-- Avito Tab Bar -->
+        <div class="avito-tabs">
+            <div class="avito-tab active">
+                <svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="4" fill="#ff4053"/><circle cx="14" cy="6" r="4" fill="#34c759"/><circle cx="6" cy="14" r="4" fill="#007aff"/><circle cx="14" cy="14" r="4" fill="#ff9500"/></svg>
+                <span>Поиск</span>
+            </div>
+            <div class="avito-tab">
+                <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                <span>Избранное</span>
+            </div>
+            <div class="avito-tab">
+                <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+                <span>Объявления</span>
+            </div>
+            <div class="avito-tab">
+                <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
+                <span>Сообщения</span>
+                <div class="tab-badge">3</div>
+            </div>
+            <div class="avito-tab">
+                <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                <span>Профиль</span>
+                <div class="tab-badge">1</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ WEBVIEW OVERLAY ============ -->
+    <div class="webview-overlay" id="webviewOverlay">
+        <div class="webview-backdrop" onclick="closeWebView()"></div>
+        <div class="webview-container">
+            <div class="webview-handle"></div>
+
+            <div class="webview-header">
+                <button class="close-btn" onclick="closeWebView()">
+                    <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                </button>
+                <div class="webview-title" id="webviewTitle">Загрузка...</div>
+            </div>
+
+            <div class="loading-indicator" id="loadingBar"></div>
+
+            <div class="webview-content" id="webviewContent">
+                <!-- Content loads here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentDeliveryType = 'courier';
+
+        function toggleDropdown() {
+            const menu = document.getElementById('dropdownMenu');
+            menu.classList.toggle('active');
+        }
+
+        function selectDeliveryType(type, title) {
+            currentDeliveryType = type;
+            document.getElementById('selectedDeliveryType').textContent = title;
+
+            // Update selected state
+            document.querySelectorAll('.dropdown-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+
+            // Close dropdown
+            document.getElementById('dropdownMenu').classList.remove('active');
+
+            // Show/hide delivery options and update button
+            const deliveryOptions = document.getElementById('deliveryOptions');
+            const mainBtn = document.getElementById('mainActionBtn');
+
+            if (type === 'pvz') {
+                deliveryOptions.style.display = 'flex';
+                mainBtn.textContent = 'Оформить посылку';
+            } else {
+                deliveryOptions.style.display = 'none';
+                mainBtn.textContent = 'Смотреть предложения';
+            }
+        }
+
+        function selectDeliveryOption(element, type) {
+            document.querySelectorAll('.delivery-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            element.classList.add('selected');
+        }
+
+        function handleMainAction() {
+            if (currentDeliveryType === 'pvz') {
+                openPvzWebView();
+            } else {
+                // For courier - just show offers (existing behavior)
+                openWebView();
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            const wrapper = document.querySelector('.calc-dropdown-wrapper');
+            if (wrapper && !wrapper.contains(e.target)) {
+                document.getElementById('dropdownMenu').classList.remove('active');
+            }
+        });
+
+        function openWebView() {
+            if (currentDeliveryType === 'pvz') {
+                openPvzWebView();
+            } else {
+                openCourierWebView();
+            }
+        }
+
+        function openCourierWebView() {
+            const overlay = document.getElementById('webviewOverlay');
+            const content = document.getElementById('webviewContent');
+            const loadingBar = document.getElementById('loadingBar');
+            const titleEl = document.getElementById('webviewTitle');
+
+            content.innerHTML = `
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <span>Загрузка...</span>
+                </div>
+            `;
+            loadingBar.classList.remove('done');
+            titleEl.textContent = 'Загрузка...';
+
+            overlay.classList.add('active');
+
+            setTimeout(() => {
+                loadingBar.classList.add('done');
+                titleEl.textContent = 'Доставка курьером';
+
+                content.innerHTML = `
+                    <div class="delivery-form">
+                        <div class="form-section">
+                            <div class="form-section-title">Маршрут</div>
+                            <div class="form-card">
+                                <div class="form-row">
+                                    <div class="form-row-icon green"></div>
+                                    <input type="text" class="form-row-input" placeholder="Откуда" value="Москва">
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-row-icon orange"></div>
+                                    <input type="text" class="form-row-input" placeholder="Куда" value="Санкт-Петербург">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <div class="form-section-title">Параметры</div>
+                            <div class="form-card">
+                                <div class="form-row">
+                                    <input type="text" class="form-row-input" placeholder="Вес посылки" value="0.5 кг">
+                                </div>
+                                <div class="form-row">
+                                    <input type="text" class="form-row-input" placeholder="Габариты" value="20 × 15 × 10 см">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="offers-section">
+                        <div class="offers-title">Варианты доставки</div>
+
+                        <div class="offer-item selected">
+                            <div class="offer-logo cdek">СДЭК</div>
+                            <div class="offer-info">
+                                <div class="offer-name">СДЭК Экспресс</div>
+                                <div class="offer-desc">Курьер до двери</div>
+                                <div class="offer-badge">Лучшая цена</div>
+                            </div>
+                            <div class="offer-price">
+                                <div class="offer-price-value">420 ₽</div>
+                                <div class="offer-price-time">1-2 дня</div>
+                            </div>
+                        </div>
+
+                        <div class="offer-item">
+                            <div class="offer-logo pochta">Почта</div>
+                            <div class="offer-info">
+                                <div class="offer-name">Почта России</div>
+                                <div class="offer-desc">Посылка 1 класса</div>
+                            </div>
+                            <div class="offer-price">
+                                <div class="offer-price-value">289 ₽</div>
+                                <div class="offer-price-time">3-5 дней</div>
+                            </div>
+                        </div>
+
+                        <div class="offer-item">
+                            <div class="offer-logo dpd">DPD</div>
+                            <div class="offer-info">
+                                <div class="offer-name">DPD Classic</div>
+                                <div class="offer-desc">Курьер до двери</div>
+                            </div>
+                            <div class="offer-price">
+                                <div class="offer-price-value">450 ₽</div>
+                                <div class="offer-price-time">2-3 дня</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="submit-section">
+                        <button class="submit-btn">Выбрать СДЭК за 420 ₽</button>
+                    </div>
+                `;
+            }, 1200);
+        }
+
+        // ========== PVZ WEBVIEW ==========
+        let pvzStep = 1;
+        let pvzData = {
+            fromCity: 'Москва',
+            toCity: 'Мурманск',
+            fromPvz: null,
+            toPvz: null,
+            sender: null,
+            recipient: null,
+            size: 'S',
+            content: null
+        };
+
+        function openPvzWebView() {
+            pvzStep = 1;
+            const overlay = document.getElementById('webviewOverlay');
+            const content = document.getElementById('webviewContent');
+            const loadingBar = document.getElementById('loadingBar');
+            const titleEl = document.getElementById('webviewTitle');
+
+            content.innerHTML = `
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <span>Загрузка...</span>
+                </div>
+            `;
+            loadingBar.classList.remove('done');
+            titleEl.textContent = 'Загрузка...';
+
+            overlay.classList.add('active');
+
+            setTimeout(() => {
+                loadingBar.classList.add('done');
+                renderPvzStep();
+            }, 800);
+        }
+
+        function renderPvzStep() {
+            const content = document.getElementById('webviewContent');
+            const titleEl = document.getElementById('webviewTitle');
+
+            switch(pvzStep) {
+                case 1:
+                    titleEl.textContent = 'Отправить посылку';
+                    content.innerHTML = getPvzMainScreen();
+                    break;
+                case 2:
+                    titleEl.textContent = 'Откуда отправить';
+                    content.innerHTML = getPvzMapScreen('from');
+                    break;
+                case 3:
+                    titleEl.textContent = 'Данные отправителя';
+                    content.innerHTML = getSenderScreen();
+                    break;
+                case 4:
+                    titleEl.textContent = 'Куда доставить';
+                    content.innerHTML = getPvzMapScreen('to');
+                    break;
+                case 5:
+                    titleEl.textContent = 'Данные получателя';
+                    content.innerHTML = getRecipientScreen();
+                    break;
+                case 6:
+                    titleEl.textContent = 'Что внутри';
+                    content.innerHTML = getContentScreen();
+                    break;
+                case 7:
+                    titleEl.textContent = 'Подтверждение';
+                    content.innerHTML = getConfirmScreen();
+                    break;
+                case 8:
+                    titleEl.textContent = 'Заказ создан';
+                    content.innerHTML = getSuccessScreen();
+                    break;
+            }
+        }
+
+        function getPvzMainScreen() {
+            const fromFilled = pvzData.fromPvz;
+            const toFilled = pvzData.toPvz;
+
+            return `
+                <style>
+                    .pvz-banner { background: linear-gradient(135deg, #00aaff 0%, #0099ee 100%); margin: 16px; border-radius: 16px; padding: 16px 20px; display: flex; align-items: center; gap: 16px; color: #fff; }
+                    .pvz-banner-icon { width: 56px; height: 56px; background: rgba(255,255,255,0.2); border-radius: 14px; display: flex; align-items: center; justify-content: center; }
+                    .pvz-banner-icon svg { width: 32px; height: 32px; fill: #fff; }
+                    .pvz-card { background: #fff; margin: 0 16px 16px; border-radius: 16px; }
+                    .pvz-route-section { padding: 20px; }
+                    .pvz-route-item { display: flex; align-items: center; gap: 14px; padding: 16px; background: #f7f7f7; border-radius: 12px; margin-bottom: 12px; cursor: pointer; }
+                    .pvz-route-item.filled { background: #e8f5e9; border: 2px solid #4caf50; }
+                    .pvz-route-item.filled.to { background: #fff3e0; border-color: #ff9800; }
+                    .pvz-route-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+                    .pvz-route-icon.from { background: ${fromFilled ? '#4caf50' : '#e8f5e9'}; }
+                    .pvz-route-icon.from svg { fill: ${fromFilled ? '#fff' : '#4caf50'}; }
+                    .pvz-route-icon.to { background: ${toFilled ? '#ff9800' : '#fff3e0'}; }
+                    .pvz-route-icon.to svg { fill: ${toFilled ? '#fff' : '#ff9800'}; }
+                    .pvz-route-icon svg { width: 24px; height: 24px; }
+                    .pvz-route-content { flex: 1; }
+                    .pvz-route-label { font-size: 13px; color: #8e8e93; margin-bottom: 2px; }
+                    .pvz-route-value { font-size: 15px; font-weight: 500; color: #333; }
+                    .pvz-route-address { font-size: 14px; color: #666; }
+                    .pvz-chips { display: flex; gap: 8px; padding: 0 20px 20px; overflow-x: auto; }
+                    .pvz-chip { padding: 10px 14px; background: #f7f7f7; border-radius: 20px; font-size: 14px; color: #333; white-space: nowrap; }
+                    .pvz-size-section { padding: 20px; border-top: 1px solid #f2f2f2; }
+                    .pvz-size-title { font-size: 18px; font-weight: 700; color: #333; margin-bottom: 16px; }
+                    .pvz-size-cards { display: flex; gap: 10px; overflow-x: auto; }
+                    .pvz-size-card { flex: 0 0 130px; background: #f7f7f7; border-radius: 14px; padding: 16px; cursor: pointer; border: 2px solid transparent; text-align: center; }
+                    .pvz-size-card.selected { background: #fff; border-color: #00aaff; }
+                    .pvz-size-card svg { width: 40px; height: 40px; fill: #8e8e93; margin-bottom: 8px; }
+                    .pvz-size-card.selected svg { fill: #00aaff; }
+                    .pvz-size-name { font-size: 15px; font-weight: 600; color: #333; }
+                    .pvz-size-desc { font-size: 12px; color: #8e8e93; margin: 4px 0 8px; }
+                    .pvz-size-price { font-size: 16px; font-weight: 700; color: #333; }
+                    .pvz-size-card.selected .pvz-size-price { color: #00aaff; }
+                    .pvz-bottom { position: sticky; bottom: 0; background: #fff; padding: 16px; border-top: 1px solid #f2f2f2; }
+                    .pvz-price-row { display: flex; justify-content: space-between; margin-bottom: 12px; }
+                    .pvz-price-label { font-size: 14px; color: #8e8e93; }
+                    .pvz-price-value { font-size: 20px; font-weight: 700; color: #333; }
+                    .pvz-submit-btn {
+                        width: 100%;
+                        height: 56px;
+                        padding: 0 24px;
+                        background: linear-gradient(135deg, #00aaff 0%, #0095e0 100%);
+                        color: #fff;
+                        border: none;
+                        border-radius: 14px;
+                        font-size: 17px;
+                        font-weight: 600;
+                        cursor: pointer;
+                        box-shadow: 0 4px 12px rgba(0, 170, 255, 0.3);
+                        transition: all 0.2s ease;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+                    .pvz-submit-btn:hover {
+                        background: linear-gradient(135deg, #00bbff 0%, #00aaff 100%);
+                        box-shadow: 0 6px 16px rgba(0, 170, 255, 0.4);
+                        transform: translateY(-1px);
+                    }
+                    .pvz-submit-btn:active {
+                        transform: translateY(0);
+                        box-shadow: 0 2px 8px rgba(0, 170, 255, 0.3);
+                    }
+                    .pvz-submit-btn:disabled {
+                        background: #f5f5f5;
+                        color: #999;
+                        box-shadow: none;
+                        cursor: not-allowed;
+                        transform: none;
+                    }
+                    .pvz-submit-btn.pvz-btn-dark {
+                        background: linear-gradient(135deg, #2c2c2e 0%, #1c1c1e 100%);
+                        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+                    }
+                    .pvz-submit-btn.pvz-btn-dark:hover {
+                        background: linear-gradient(135deg, #3c3c3e 0%, #2c2c2e 100%);
+                        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+                    }
+                </style>
+
+                <div class="pvz-banner">
+                    <div class="pvz-banner-icon">
+                        <svg viewBox="0 0 24 24"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18-.21 0-.41-.06-.57-.18l-7.9-4.44A.991.991 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18.21 0 .41.06.57.18l7.9 4.44c.32.17.53.5.53.88v9z"/></svg>
+                    </div>
+                    <div>
+                        <div style="font-size: 16px; font-weight: 600; margin-bottom: 4px;">Доставка из ПВЗ в ПВЗ</div>
+                        <div style="font-size: 14px; opacity: 0.9;">Выгодно и удобно по всей России</div>
+                    </div>
+                </div>
+
+                <div class="pvz-card">
+                    <div class="pvz-route-section">
+                        <div class="pvz-route-item ${fromFilled ? 'filled' : ''}" onclick="pvzStep = 2; renderPvzStep();">
+                            <div class="pvz-route-icon from">
+                                <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                            </div>
+                            <div class="pvz-route-content">
+                                <div class="pvz-route-label">Откуда · ${pvzData.fromCity}</div>
+                                ${fromFilled ? `
+                                    <div class="pvz-route-value">${pvzData.fromPvz.name}</div>
+                                    <div class="pvz-route-address">${pvzData.fromPvz.address}</div>
+                                ` : `
+                                    <div class="pvz-route-value" style="color: #00aaff;">Выберите ПВЗ</div>
+                                `}
+                            </div>
+                            <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; fill: #c7c7cc;"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+                        </div>
+
+                        <div class="pvz-route-item ${toFilled ? 'filled to' : ''}" onclick="pvzStep = 4; renderPvzStep();">
+                            <div class="pvz-route-icon to">
+                                <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                            </div>
+                            <div class="pvz-route-content">
+                                <div class="pvz-route-label">Куда · ${pvzData.toCity}</div>
+                                ${toFilled ? `
+                                    <div class="pvz-route-value">${pvzData.toPvz.name}</div>
+                                    <div class="pvz-route-address">${pvzData.toPvz.address}</div>
+                                ` : `
+                                    <div class="pvz-route-value" style="color: #00aaff;">Выберите ПВЗ</div>
+                                `}
+                            </div>
+                            <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; fill: #c7c7cc;"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+                        </div>
+                    </div>
+
+                    <div class="pvz-chips">
+                        <div class="pvz-chip">Про упаковку</div>
+                        <div class="pvz-chip">Как отправить</div>
+                        <div class="pvz-chip">Запрещённые вещи</div>
+                    </div>
+
+                    <div class="pvz-size-section">
+                        <div class="pvz-size-title">Размер посылки</div>
+                        <div class="pvz-size-cards">
+                            <div class="pvz-size-card ${pvzData.size === 'A4' ? 'selected' : ''}" onclick="selectPvzSize('A4', 99)">
+                                <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zM6 20V4h7v5h5v11H6z"/></svg>
+                                <div class="pvz-size-name">Конверт</div>
+                                <div class="pvz-size-desc">до 0.5 кг</div>
+                                <div class="pvz-size-price">99 ₽</div>
+                            </div>
+                            <div class="pvz-size-card ${pvzData.size === 'S' ? 'selected' : ''}" onclick="selectPvzSize('S', 219)">
+                                <svg viewBox="0 0 24 24"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18-.21 0-.41-.06-.57-.18l-7.9-4.44A.991.991 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18.21 0 .41.06.57.18l7.9 4.44c.32.17.53.5.53.88v9z"/></svg>
+                                <div class="pvz-size-name">Размер S</div>
+                                <div class="pvz-size-desc">до 2 кг</div>
+                                <div class="pvz-size-price">219 ₽</div>
+                            </div>
+                            <div class="pvz-size-card ${pvzData.size === 'M' ? 'selected' : ''}" onclick="selectPvzSize('M', 289)">
+                                <svg viewBox="0 0 24 24"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18-.21 0-.41-.06-.57-.18l-7.9-4.44A.991.991 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18.21 0 .41.06.57.18l7.9 4.44c.32.17.53.5.53.88v9z"/></svg>
+                                <div class="pvz-size-name">Размер M</div>
+                                <div class="pvz-size-desc">до 5 кг</div>
+                                <div class="pvz-size-price">289 ₽</div>
+                            </div>
+                            <div class="pvz-size-card ${pvzData.size === 'L' ? 'selected' : ''}" onclick="selectPvzSize('L', 389)">
+                                <svg viewBox="0 0 24 24"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18-.21 0-.41-.06-.57-.18l-7.9-4.44A.991.991 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18.21 0 .41.06.57.18l7.9 4.44c.32.17.53.5.53.88v9z"/></svg>
+                                <div class="pvz-size-name">Размер L</div>
+                                <div class="pvz-size-desc">до 10 кг</div>
+                                <div class="pvz-size-price">389 ₽</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pvz-bottom">
+                    <div class="pvz-price-row">
+                        <span class="pvz-price-label">Стоимость доставки</span>
+                        <span class="pvz-price-value" id="pvzTotalPrice">от 219 ₽</span>
+                    </div>
+                    <button class="pvz-submit-btn" onclick="pvzStep = 2; renderPvzStep();" ${!fromFilled ? '' : 'onclick="pvzStep = 6; renderPvzStep();"'}>
+                        ${fromFilled && toFilled ? 'Готово' : 'Выберите пункт отправления'}
+                    </button>
+                </div>
+            `;
+        }
+
+        function selectPvzSize(size, price) {
+            pvzData.size = size;
+            document.querySelectorAll('.pvz-size-card').forEach(card => card.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+            document.getElementById('pvzTotalPrice').textContent = price + ' ₽';
+        }
+
+        function getPvzMapScreen(type) {
+            const isFrom = type === 'from';
+            const title = isFrom ? 'Откуда отправить' : 'Куда доставить';
+            const city = isFrom ? pvzData.fromCity : pvzData.toCity;
+
+            const pvzList = isFrom ? [
+                { id: 1, name: 'СДЭК', address: 'ул. Складочная, 1 стр. 5', hours: '09:00-21:00', distance: '350 м', color: '#00a651' },
+                { id: 2, name: 'Почта России', address: 'ул. Сущёвский Вал, 14', hours: '08:00-20:00', distance: '520 м', color: '#005baa' },
+                { id: 3, name: 'Boxberry', address: 'Бутырская ул., 77', hours: '10:00-22:00', distance: '780 м', color: '#ff6b00' }
+            ] : [
+                { id: 1, name: 'СДЭК', address: 'ул. Полярные Зори, 21', hours: '09:00-21:00', price: '250 ₽', color: '#00a651' },
+                { id: 2, name: 'Почта России', address: 'пр. Ленина, 82', hours: '08:00-20:00', price: '200 ₽', color: '#005baa' },
+                { id: 3, name: 'Boxberry', address: 'ул. Книповича, 32', hours: '10:00-22:00', price: '230 ₽', color: '#ff6b00' }
+            ];
+
+            return `
+                <style>
+                    .pvz-map { height: 280px; background: #e8e4df; position: relative; background-image: linear-gradient(rgba(200,200,200,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(200,200,200,0.3) 1px, transparent 1px); background-size: 40px 40px; }
+                    .pvz-map-marker { position: absolute; width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 9px; color: #fff; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+                    .pvz-map-controls { position: absolute; right: 12px; top: 12px; }
+                    .pvz-map-btn { width: 44px; height: 44px; background: #fff; border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 8px; }
+                    .pvz-map-btn svg { width: 24px; height: 24px; fill: #333; }
+                    .pvz-search { margin: 16px; background: #f7f7f7; border-radius: 12px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; }
+                    .pvz-search svg { width: 20px; height: 20px; fill: #8e8e93; }
+                    .pvz-search span { font-size: 16px; color: #8e8e93; }
+                    .pvz-list { padding: 0 16px; max-height: 200px; overflow-y: auto; }
+                    .pvz-list-item { display: flex; align-items: center; gap: 14px; padding: 14px; background: #fff; border-radius: 14px; margin-bottom: 8px; cursor: pointer; border: 2px solid transparent; }
+                    .pvz-list-item:hover { background: #f7f7f7; }
+                    .pvz-list-item.selected { background: #f0f7ff; border-color: #00aaff; }
+                    .pvz-list-logo { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 10px; color: #fff; }
+                    .pvz-list-content { flex: 1; }
+                    .pvz-list-name { font-size: 16px; font-weight: 600; color: #333; }
+                    .pvz-list-address { font-size: 14px; color: #8e8e93; margin-top: 2px; }
+                    .pvz-list-meta { display: flex; gap: 8px; margin-top: 4px; font-size: 12px; }
+                    .pvz-list-hours { color: #4caf50; font-weight: 500; }
+                    .pvz-list-distance { color: #8e8e93; }
+                    .pvz-map-bottom { padding: 16px; border-top: 1px solid #f2f2f2; background: #fff; }
+                </style>
+
+                <div class="pvz-map">
+                    <div class="pvz-map-marker" style="top: 25%; left: 30%; background: #00a651;">СДЭК</div>
+                    <div class="pvz-map-marker" style="top: 40%; left: 55%; background: #005baa;">Почта</div>
+                    <div class="pvz-map-marker" style="top: 55%; left: 25%; background: #ff6b00;">BB</div>
+                    <div class="pvz-map-marker" style="top: 35%; left: 75%; background: #6b8e23;">5Post</div>
+                    <div class="pvz-map-controls">
+                        <div class="pvz-map-btn">
+                            <svg viewBox="0 0 24 24"><path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3c-.46-4.17-3.77-7.48-7.94-7.94V1h-2v2.06C6.83 3.52 3.52 6.83 3.06 11H1v2h2.06c.46 4.17 3.77 7.48 7.94 7.94V23h2v-2.06c4.17-.46 7.48-3.77 7.94-7.94H23v-2h-2.06z"/></svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pvz-search">
+                    <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5z"/></svg>
+                    <span>Поиск по адресам в ${city}</span>
+                </div>
+
+                <div class="pvz-list">
+                    ${pvzList.map((pvz, i) => `
+                        <div class="pvz-list-item" onclick="selectPvz('${type}', ${JSON.stringify(pvz).replace(/"/g, '&quot;')})">
+                            <div class="pvz-list-logo" style="background: ${pvz.color};">${pvz.name.substring(0, 4)}</div>
+                            <div class="pvz-list-content">
+                                <div class="pvz-list-name">${pvz.name}</div>
+                                <div class="pvz-list-address">${pvz.address}</div>
+                                <div class="pvz-list-meta">
+                                    <span class="pvz-list-hours">до ${pvz.hours.split('-')[1]}</span>
+                                    <span class="pvz-list-distance">${pvz.distance || pvz.price}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <div class="pvz-map-bottom">
+                    <button class="pvz-submit-btn" disabled>Выберите пункт</button>
+                </div>
+            `;
+        }
+
+        function selectPvz(type, pvzJson) {
+            const pvz = typeof pvzJson === 'string' ? JSON.parse(pvzJson.replace(/&quot;/g, '"')) : pvzJson;
+
+            if (type === 'from') {
+                pvzData.fromPvz = pvz;
+                pvzStep = 3; // Go to sender form
+            } else {
+                pvzData.toPvz = pvz;
+                pvzStep = 5; // Go to recipient form
+            }
+            renderPvzStep();
+        }
+
+        function getSenderScreen() {
+            return `
+                <style>
+                    .pvz-form-section { background: #fff; margin: 16px; border-radius: 16px; padding: 20px; }
+                    .pvz-selected-pvz { display: flex; align-items: center; gap: 14px; padding: 16px; background: #f7f7f7; border-radius: 12px; margin-bottom: 20px; }
+                    .pvz-selected-logo { width: 48px; height: 48px; border-radius: 12px; background: #00a651; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 10px; color: #fff; }
+                    .pvz-selected-info { flex: 1; }
+                    .pvz-selected-name { font-size: 16px; font-weight: 600; color: #333; }
+                    .pvz-selected-address { font-size: 14px; color: #8e8e93; }
+                    .pvz-form-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+                    .pvz-form-icon { width: 44px; height: 44px; border-radius: 12px; background: #e8f5e9; display: flex; align-items: center; justify-content: center; }
+                    .pvz-form-icon svg { width: 24px; height: 24px; fill: #4caf50; }
+                    .pvz-form-title { font-size: 18px; font-weight: 700; color: #333; }
+                    .pvz-form-group { margin-bottom: 16px; }
+                    .pvz-form-label { font-size: 13px; color: #8e8e93; margin-bottom: 8px; display: block; }
+                    .pvz-form-input { width: 100%; padding: 14px 16px; background: #f7f7f7; border: none; border-radius: 12px; font-size: 16px; color: #333; }
+                    .pvz-form-input:focus { outline: none; background: #fff; box-shadow: 0 0 0 2px #00aaff; }
+                    .pvz-form-bottom { position: sticky; bottom: 0; background: #fff; padding: 16px; border-top: 1px solid #f2f2f2; }
+                    .pvz-submit-btn { width: 100%; height: 56px; padding: 0 24px; background: linear-gradient(135deg, #00aaff 0%, #0095e0 100%); color: #fff; border: none; border-radius: 14px; font-size: 17px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(0, 170, 255, 0.3); display: flex; align-items: center; justify-content: center; }
+                </style>
+
+                <div class="pvz-form-section">
+                    <div class="pvz-selected-pvz">
+                        <div class="pvz-selected-logo" style="background: ${pvzData.fromPvz?.color || '#00a651'};">
+                            ${(pvzData.fromPvz?.name || 'СДЭК').substring(0, 4)}
+                        </div>
+                        <div class="pvz-selected-info">
+                            <div class="pvz-selected-name">${pvzData.fromPvz?.name || 'СДЭК'}</div>
+                            <div class="pvz-selected-address">${pvzData.fromPvz?.address || ''}</div>
+                        </div>
+                        <span style="color: #00aaff; font-size: 14px; cursor: pointer;" onclick="pvzStep = 2; renderPvzStep();">Изменить</span>
+                    </div>
+
+                    <div class="pvz-form-header">
+                        <div class="pvz-form-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                        </div>
+                        <div class="pvz-form-title">Данные отправителя</div>
+                    </div>
+
+                    <div class="pvz-form-group">
+                        <label class="pvz-form-label">ФИО</label>
+                        <input type="text" class="pvz-form-input" id="senderName" placeholder="Иванов Иван Иванович" value="Вячеслав Блинов">
+                    </div>
+                    <div class="pvz-form-group">
+                        <label class="pvz-form-label">Телефон</label>
+                        <input type="tel" class="pvz-form-input" id="senderPhone" placeholder="+7 (___) ___-__-__" value="+7 (968) 040-89-31">
+                    </div>
+                    <div class="pvz-form-group">
+                        <label class="pvz-form-label">Email</label>
+                        <input type="email" class="pvz-form-input" id="senderEmail" placeholder="email@example.com">
+                    </div>
+                </div>
+
+                <div class="pvz-form-bottom">
+                    <button class="pvz-submit-btn" onclick="saveSender()">Готово</button>
+                </div>
+            `;
+        }
+
+        function saveSender() {
+            pvzData.sender = {
+                name: document.getElementById('senderName').value,
+                phone: document.getElementById('senderPhone').value,
+                email: document.getElementById('senderEmail').value
+            };
+            pvzStep = pvzData.toPvz ? 6 : 4; // Go to content or to-map
+            renderPvzStep();
+        }
+
+        function getRecipientScreen() {
+            return `
+                <style>
+                    .pvz-form-section { background: #fff; margin: 16px; border-radius: 16px; padding: 20px; }
+                    .pvz-selected-pvz { display: flex; align-items: center; gap: 14px; padding: 16px; background: #f7f7f7; border-radius: 12px; margin-bottom: 20px; }
+                    .pvz-selected-logo { width: 48px; height: 48px; border-radius: 12px; background: #00a651; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 10px; color: #fff; }
+                    .pvz-selected-info { flex: 1; }
+                    .pvz-selected-name { font-size: 16px; font-weight: 600; color: #333; }
+                    .pvz-selected-address { font-size: 14px; color: #8e8e93; }
+                    .pvz-form-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+                    .pvz-form-icon { width: 44px; height: 44px; border-radius: 12px; background: #fff3e0; display: flex; align-items: center; justify-content: center; }
+                    .pvz-form-icon svg { width: 24px; height: 24px; fill: #ff9800; }
+                    .pvz-form-title { font-size: 18px; font-weight: 700; color: #333; }
+                    .pvz-form-group { margin-bottom: 16px; }
+                    .pvz-form-label { font-size: 13px; color: #8e8e93; margin-bottom: 8px; display: block; }
+                    .pvz-form-input { width: 100%; padding: 14px 16px; background: #f7f7f7; border: none; border-radius: 12px; font-size: 16px; color: #333; }
+                    .pvz-form-input:focus { outline: none; background: #fff; box-shadow: 0 0 0 2px #00aaff; }
+                    .pvz-form-bottom { position: sticky; bottom: 0; background: #fff; padding: 16px; border-top: 1px solid #f2f2f2; }
+                    .pvz-submit-btn { width: 100%; height: 56px; padding: 0 24px; background: linear-gradient(135deg, #00aaff 0%, #0095e0 100%); color: #fff; border: none; border-radius: 14px; font-size: 17px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(0, 170, 255, 0.3); display: flex; align-items: center; justify-content: center; }
+                </style>
+
+                <div class="pvz-form-section">
+                    <div class="pvz-selected-pvz">
+                        <div class="pvz-selected-logo" style="background: ${pvzData.toPvz?.color || '#00a651'};">
+                            ${(pvzData.toPvz?.name || 'СДЭК').substring(0, 4)}
+                        </div>
+                        <div class="pvz-selected-info">
+                            <div class="pvz-selected-name">${pvzData.toPvz?.name || 'СДЭК'}</div>
+                            <div class="pvz-selected-address">${pvzData.toPvz?.address || ''}</div>
+                        </div>
+                        <span style="color: #00aaff; font-size: 14px; cursor: pointer;" onclick="pvzStep = 4; renderPvzStep();">Изменить</span>
+                    </div>
+
+                    <div class="pvz-form-header">
+                        <div class="pvz-form-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                        </div>
+                        <div class="pvz-form-title">Данные получателя</div>
+                    </div>
+
+                    <div class="pvz-form-group">
+                        <label class="pvz-form-label">ФИО</label>
+                        <input type="text" class="pvz-form-input" id="recipientName" placeholder="Иванов Иван Иванович">
+                    </div>
+                    <div class="pvz-form-group">
+                        <label class="pvz-form-label">Телефон</label>
+                        <input type="tel" class="pvz-form-input" id="recipientPhone" placeholder="+7 (___) ___-__-__">
+                    </div>
+                    <div class="pvz-form-group">
+                        <label class="pvz-form-label">Email</label>
+                        <input type="email" class="pvz-form-input" id="recipientEmail" placeholder="email@example.com">
+                    </div>
+                </div>
+
+                <div class="pvz-form-bottom">
+                    <button class="pvz-submit-btn" onclick="saveRecipient()">Готово</button>
+                </div>
+            `;
+        }
+
+        function saveRecipient() {
+            pvzData.recipient = {
+                name: document.getElementById('recipientName').value,
+                phone: document.getElementById('recipientPhone').value,
+                email: document.getElementById('recipientEmail').value
+            };
+            pvzStep = 6;
+            renderPvzStep();
+        }
+
+        function getContentScreen() {
+            return `
+                <style>
+                    .pvz-content-section { background: #fff; margin: 16px; border-radius: 16px; padding: 20px; }
+                    .pvz-categories { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+                    .pvz-category { padding: 12px 16px; background: #f7f7f7; border-radius: 12px; font-size: 15px; color: #333; cursor: pointer; border: 2px solid transparent; }
+                    .pvz-category.selected { background: #e3f2fd; border-color: #00aaff; color: #00aaff; }
+                    .pvz-form-group { margin-bottom: 16px; }
+                    .pvz-form-label { font-size: 13px; color: #8e8e93; margin-bottom: 8px; display: block; }
+                    .pvz-form-input { width: 100%; padding: 14px 16px; background: #f7f7f7; border: none; border-radius: 12px; font-size: 16px; color: #333; }
+                    .pvz-form-textarea { min-height: 100px; resize: none; }
+                    .pvz-value-section { background: #fff; margin: 16px; border-radius: 16px; padding: 20px; }
+                    .pvz-value-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+                    .pvz-value-icon { width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%); display: flex; align-items: center; justify-content: center; }
+                    .pvz-value-icon svg { width: 24px; height: 24px; fill: #fff; }
+                    .pvz-form-bottom { position: sticky; bottom: 0; background: #fff; padding: 16px; border-top: 1px solid #f2f2f2; }
+                    .pvz-submit-btn { width: 100%; height: 56px; padding: 0 24px; background: linear-gradient(135deg, #00aaff 0%, #0095e0 100%); color: #fff; border: none; border-radius: 14px; font-size: 17px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(0, 170, 255, 0.3); display: flex; align-items: center; justify-content: center; }
+                </style>
+
+                <div class="pvz-content-section">
+                    <div style="font-size: 18px; font-weight: 700; color: #333; margin-bottom: 16px;">Категория товара</div>
+                    <div class="pvz-categories">
+                        <div class="pvz-category" onclick="selectCategory(this)">Одежда</div>
+                        <div class="pvz-category selected" onclick="selectCategory(this)">Электроника</div>
+                        <div class="pvz-category" onclick="selectCategory(this)">Обувь</div>
+                        <div class="pvz-category" onclick="selectCategory(this)">Косметика</div>
+                        <div class="pvz-category" onclick="selectCategory(this)">Книги</div>
+                        <div class="pvz-category" onclick="selectCategory(this)">Другое</div>
+                    </div>
+
+                    <div class="pvz-form-group">
+                        <label class="pvz-form-label">Описание содержимого</label>
+                        <textarea class="pvz-form-input pvz-form-textarea" id="contentDesc" placeholder="Опишите, что отправляете">Смартфон iPhone 13 Pro</textarea>
+                    </div>
+                </div>
+
+                <div class="pvz-value-section">
+                    <div class="pvz-value-header">
+                        <div class="pvz-value-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+                        </div>
+                        <div>
+                            <div style="font-size: 16px; font-weight: 600; color: #333;">Оценочная стоимость</div>
+                            <div style="font-size: 13px; color: #8e8e93;">Для расчёта страховки</div>
+                        </div>
+                    </div>
+                    <input type="number" class="pvz-form-input" id="contentValue" placeholder="0 ₽" value="85000">
+                </div>
+
+                <div class="pvz-form-bottom">
+                    <button class="pvz-submit-btn" onclick="saveContent()">Готово</button>
+                </div>
+            `;
+        }
+
+        function selectCategory(el) {
+            document.querySelectorAll('.pvz-category').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+
+        function saveContent() {
+            pvzData.content = {
+                description: document.getElementById('contentDesc').value,
+                value: document.getElementById('contentValue').value
+            };
+            pvzStep = 7;
+            renderPvzStep();
+        }
+
+        function getConfirmScreen() {
+            const prices = { 'A4': 99, 'S': 219, 'M': 289, 'L': 389 };
+            const basePrice = prices[pvzData.size] || 219;
+            const insurance = 120;
+            const total = basePrice + insurance;
+
+            return `
+                <style>
+                    .pvz-confirm-section { background: #fff; margin: 16px; border-radius: 16px; padding: 20px; }
+                    .pvz-confirm-title { font-size: 18px; font-weight: 700; color: #333; margin-bottom: 16px; }
+                    .pvz-confirm-route { display: flex; }
+                    .pvz-confirm-line { width: 24px; display: flex; flex-direction: column; align-items: center; margin-right: 12px; }
+                    .pvz-confirm-dot { width: 12px; height: 12px; border-radius: 50%; }
+                    .pvz-confirm-dot.from { background: #4caf50; }
+                    .pvz-confirm-dot.to { background: #ff9800; }
+                    .pvz-confirm-connector { flex: 1; width: 2px; background: #e5e5e5; margin: 4px 0; }
+                    .pvz-confirm-details { flex: 1; }
+                    .pvz-confirm-point { margin-bottom: 16px; }
+                    .pvz-confirm-label { font-size: 13px; color: #8e8e93; margin-bottom: 4px; }
+                    .pvz-confirm-address { font-size: 15px; font-weight: 500; color: #333; }
+                    .pvz-confirm-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f2f2f2; }
+                    .pvz-confirm-row:last-child { border-bottom: none; }
+                    .pvz-confirm-row-label { font-size: 15px; color: #8e8e93; }
+                    .pvz-confirm-row-value { font-size: 15px; font-weight: 500; color: #333; }
+                    .pvz-form-bottom { position: sticky; bottom: 0; background: #fff; padding: 16px; border-top: 1px solid #f2f2f2; }
+                    .pvz-price-breakdown { margin-bottom: 12px; }
+                    .pvz-price-row { display: flex; justify-content: space-between; padding: 4px 0; }
+                    .pvz-price-row.total { padding-top: 12px; border-top: 1px solid #f2f2f2; margin-top: 8px; }
+                    .pvz-price-label { font-size: 14px; color: #8e8e93; }
+                    .pvz-price-label.total { font-size: 16px; color: #333; font-weight: 600; }
+                    .pvz-price-value { font-size: 14px; color: #333; }
+                    .pvz-price-value.total { font-size: 22px; font-weight: 700; }
+                    .pvz-submit-btn { width: 100%; height: 56px; padding: 0 24px; background: linear-gradient(135deg, #00aaff 0%, #0095e0 100%); color: #fff; border: none; border-radius: 14px; font-size: 17px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(0, 170, 255, 0.3); display: flex; align-items: center; justify-content: center; }
+                </style>
+
+                <div class="pvz-confirm-section">
+                    <div class="pvz-confirm-title">Маршрут</div>
+                    <div class="pvz-confirm-route">
+                        <div class="pvz-confirm-line">
+                            <div class="pvz-confirm-dot from"></div>
+                            <div class="pvz-confirm-connector"></div>
+                            <div class="pvz-confirm-dot to"></div>
+                        </div>
+                        <div class="pvz-confirm-details">
+                            <div class="pvz-confirm-point">
+                                <div class="pvz-confirm-label">Откуда</div>
+                                <div class="pvz-confirm-address">${pvzData.fromPvz?.name}, ${pvzData.fromPvz?.address}</div>
+                            </div>
+                            <div class="pvz-confirm-point">
+                                <div class="pvz-confirm-label">Куда</div>
+                                <div class="pvz-confirm-address">${pvzData.toPvz?.name}, ${pvzData.toPvz?.address}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pvz-confirm-section">
+                    <div class="pvz-confirm-title">Детали</div>
+                    <div class="pvz-confirm-row">
+                        <span class="pvz-confirm-row-label">Размер</span>
+                        <span class="pvz-confirm-row-value">${pvzData.size}</span>
+                    </div>
+                    <div class="pvz-confirm-row">
+                        <span class="pvz-confirm-row-label">Содержимое</span>
+                        <span class="pvz-confirm-row-value">${pvzData.content?.description || 'Не указано'}</span>
+                    </div>
+                    <div class="pvz-confirm-row">
+                        <span class="pvz-confirm-row-label">Стоимость</span>
+                        <span class="pvz-confirm-row-value">${pvzData.content?.value || 0} ₽</span>
+                    </div>
+                    <div class="pvz-confirm-row">
+                        <span class="pvz-confirm-row-label">Срок доставки</span>
+                        <span class="pvz-confirm-row-value">2-3 дня</span>
+                    </div>
+                </div>
+
+                <div class="pvz-form-bottom">
+                    <div style="font-size: 14px; color: #8e8e93; margin-bottom: 12px; text-align: center;">Доставку оплачивает получатель при получении</div>
+                    <div class="pvz-price-breakdown">
+                        <div class="pvz-price-row">
+                            <span class="pvz-price-label">Стоимость доставки для получателя</span>
+                            <span class="pvz-price-value">${basePrice} ₽</span>
+                        </div>
+                        <div class="pvz-price-row">
+                            <span class="pvz-price-label">Стоимость страховки</span>
+                            <span class="pvz-price-value">${insurance} ₽</span>
+                        </div>
+                        <div class="pvz-price-row total">
+                            <span class="pvz-price-label total">Итого для получателя</span>
+                            <span class="pvz-price-value total">${total} ₽</span>
+                        </div>
+                    </div>
+                    <button class="pvz-submit-btn" onclick="pvzStep = 8; renderPvzStep();">Создать посылку</button>
+                </div>
+            `;
+        }
+
+        function getSuccessScreen() {
+            return `
+                <style>
+                    .pvz-success-block { background: linear-gradient(135deg, #00aaff 0%, #0099ee 100%); margin: 16px; border-radius: 20px; padding: 40px 24px; text-align: center; color: #fff; }
+                    .pvz-success-icon { width: 80px; height: 80px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; }
+                    .pvz-success-icon svg { width: 44px; height: 44px; fill: #fff; }
+                    .pvz-success-title { font-size: 26px; font-weight: 700; margin-bottom: 8px; }
+                    .pvz-success-subtitle { font-size: 16px; opacity: 0.9; }
+                    .pvz-order-card { background: #fff; margin: 16px; border-radius: 16px; padding: 20px; }
+                    .pvz-order-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid #f2f2f2; }
+                    .pvz-order-number-label { font-size: 13px; color: #8e8e93; margin-bottom: 4px; }
+                    .pvz-order-number { font-size: 18px; font-weight: 700; color: #333; }
+                    .pvz-order-status { background: #e8f5e9; color: #4caf50; padding: 8px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; }
+                    .pvz-order-row { display: flex; justify-content: space-between; padding: 10px 0; }
+                    .pvz-order-label { font-size: 15px; color: #8e8e93; }
+                    .pvz-order-value { font-size: 15px; font-weight: 500; color: #333; }
+                    .pvz-form-bottom { position: sticky; bottom: 0; background: #fff; padding: 16px; border-top: 1px solid #f2f2f2; }
+                    .pvz-submit-btn { width: 100%; height: 56px; padding: 0 24px; background: linear-gradient(135deg, #00aaff 0%, #0095e0 100%); color: #fff; border: none; border-radius: 14px; font-size: 17px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(0, 170, 255, 0.3); display: flex; align-items: center; justify-content: center; }
+                    .pvz-submit-btn.pvz-btn-dark { background: linear-gradient(135deg, #2c2c2e 0%, #1c1c1e 100%); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); }
+                </style>
+
+                <div class="pvz-success-block">
+                    <div class="pvz-success-icon">
+                        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                    </div>
+                    <div class="pvz-success-title">Заказ создан!</div>
+                    <div class="pvz-success-subtitle">Сдайте посылку в ПВЗ в течение 3 дней</div>
+                </div>
+
+                <div class="pvz-order-card">
+                    <div class="pvz-order-header">
+                        <div>
+                            <div class="pvz-order-number-label">Номер заказа</div>
+                            <div class="pvz-order-number">AVT-2026-${Math.floor(Math.random() * 900000) + 100000}</div>
+                        </div>
+                        <div class="pvz-order-status">Ожидает сдачи</div>
+                    </div>
+
+                    <div class="pvz-order-row">
+                        <span class="pvz-order-label">Маршрут</span>
+                        <span class="pvz-order-value">Москва → СПб</span>
+                    </div>
+                    <div class="pvz-order-row">
+                        <span class="pvz-order-label">Срок доставки</span>
+                        <span class="pvz-order-value">2-3 дня</span>
+                    </div>
+                    <div class="pvz-order-row">
+                        <span class="pvz-order-label">Трек-номер</span>
+                        <span class="pvz-order-value" style="color: #00aaff;">1234567890</span>
+                    </div>
+                </div>
+
+                <div class="pvz-form-bottom">
+                    <button class="pvz-submit-btn pvz-btn-dark" onclick="closeWebView()">Готово</button>
+                </div>
+            `;
+        }
+
+        function closeWebView() {
+            document.getElementById('webviewOverlay').classList.remove('active');
+            // Reset PVZ data
+            pvzStep = 1;
+            pvzData = { fromPvz: null, toPvz: null, sender: null, recipient: null, size: 'S', content: null };
+        }
+    </script>
+</body>
+</html>

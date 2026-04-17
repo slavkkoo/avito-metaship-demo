@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Metaship — Доставка</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            max-width: 430px;
+            margin: 0 auto;
+        }
+
+        /* WebView Header - отличается от нативного */
+        .webview-header {
+            background: #00aaff;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        /* URL Bar - показывает что это WebView */
+        .url-bar {
+            background: rgba(0,0,0,0.15);
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+        }
+
+        .url-bar-icon {
+            width: 14px;
+            height: 14px;
+            fill: rgba(255,255,255,0.7);
+        }
+
+        .url-bar-text {
+            flex: 1;
+            opacity: 0.85;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .url-bar-lock {
+            width: 12px;
+            height: 12px;
+            fill: #4caf50;
+        }
+
+        .webview-nav {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            gap: 12px;
+        }
+
+        .close-btn {
+            width: 32px;
+            height: 32px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .close-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: white;
+        }
+
+        .webview-title {
+            flex: 1;
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        .partner-badge {
+            background: white;
+            color: #667eea;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        /* Loading indicator */
+        .loading-bar {
+            height: 3px;
+            background: rgba(255,255,255,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loading-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 30%;
+            height: 100%;
+            background: white;
+            animation: loading 1.5s ease-in-out infinite;
+        }
+
+        @keyframes loading {
+            0% { left: -30%; }
+            100% { left: 100%; }
+        }
+
+        .loading-bar.done::after {
+            display: none;
+        }
+
+        /* Content */
+        .content-area {
+            padding-bottom: 20px;
+        }
+
+        /* Route Summary */
+        .route-input {
+            background: white;
+            margin: 12px;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .route-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+        }
+
+        .route-row:first-child {
+            padding-top: 0;
+        }
+
+        .route-row:last-child {
+            padding-bottom: 0;
+        }
+
+        .route-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .route-dot.from {
+            background: #4caf50;
+        }
+
+        .route-dot.to {
+            background: #ff9800;
+        }
+
+        .route-input-field {
+            flex: 1;
+            padding: 12px 14px;
+            background: #f5f5f5;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            color: #333;
+        }
+
+        .route-input-field::placeholder {
+            color: #999;
+        }
+
+        .route-line {
+            width: 12px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .route-line-dots {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .route-line-dot {
+            width: 3px;
+            height: 3px;
+            background: #ddd;
+            border-radius: 50%;
+        }
+
+        /* Parcel info */
+        .parcel-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .parcel-field {
+            flex: 1;
+            padding: 10px 12px;
+            background: #f5f5f5;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #333;
+            text-align: center;
+        }
+
+        .parcel-field::placeholder {
+            color: #999;
+        }
+
+        .btn-calculate {
+            display: block;
+            margin: 16px 12px 0;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        /* Results Section */
+        .results-section {
+            margin-top: 20px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 12px 10px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .results-count {
+            font-size: 13px;
+            color: #999;
+        }
+
+        /* Offer Cards */
+        .offer-card {
+            background: white;
+            margin: 0 12px 10px;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+            transition: transform 0.2s;
+        }
+
+        .offer-card:active {
+            transform: scale(0.98);
+        }
+
+        .offer-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .offer-logo {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 10px;
+            color: white;
+        }
+
+        .offer-logo.cdek {
+            background: linear-gradient(135deg, #00a651 0%, #00c853 100%);
+        }
+
+        .offer-logo.pochta {
+            background: linear-gradient(135deg, #003087 0%, #0052cc 100%);
+        }
+
+        .offer-logo.dpd {
+            background: linear-gradient(135deg, #dc0032 0%, #ff1744 100%);
+        }
+
+        .offer-info {
+            flex: 1;
+        }
+
+        .offer-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .offer-type {
+            font-size: 12px;
+            color: #999;
+            margin-top: 2px;
+        }
+
+        .offer-price {
+            text-align: right;
+        }
+
+        .price-value {
+            font-size: 17px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .price-time {
+            font-size: 11px;
+            color: #999;
+            margin-top: 2px;
+        }
+
+        .offer-tags {
+            display: flex;
+            gap: 6px;
+            margin-top: 12px;
+        }
+
+        .offer-tag {
+            background: #f0f7ff;
+            color: #00aaff;
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .offer-tag.green {
+            background: #e8f5e9;
+            color: #4caf50;
+        }
+
+        .best-badge {
+            position: absolute;
+            top: -8px;
+            right: 12px;
+            background: #667eea;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .offer-card.best {
+            position: relative;
+            border: 2px solid #667eea;
+        }
+
+        /* Metaship Footer */
+        .metaship-footer {
+            text-align: center;
+            padding: 20px 12px;
+            color: #999;
+            font-size: 12px;
+        }
+
+        .metaship-footer-logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 6px;
+        }
+
+        .metaship-footer-logo strong {
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <!-- WebView Header с URL баром -->
+    <div class="webview-header">
+        <div class="url-bar">
+            <svg class="url-bar-lock" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+            <span class="url-bar-text">metaship.ru/avito/delivery</span>
+            <svg class="url-bar-icon" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+        </div>
+        <div class="webview-nav">
+            <a href="avito-native.html" class="close-btn">
+                <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+            </a>
+            <div class="webview-title">Выбор доставки</div>
+            <div class="partner-badge">Metaship</div>
+        </div>
+        <div class="loading-bar done"></div>
+    </div>
+
+    <div class="content-area">
+        <!-- Route Input -->
+        <div class="route-input">
+            <div class="route-row">
+                <div class="route-dot from"></div>
+                <input type="text" class="route-input-field" placeholder="Откуда" value="Москва">
+            </div>
+            <div class="route-row">
+                <div class="route-line">
+                    <div class="route-line-dots">
+                        <div class="route-line-dot"></div>
+                        <div class="route-line-dot"></div>
+                        <div class="route-line-dot"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="route-row">
+                <div class="route-dot to"></div>
+                <input type="text" class="route-input-field" placeholder="Куда" value="Санкт-Петербург">
+            </div>
+
+            <div class="parcel-row">
+                <input type="text" class="parcel-field" placeholder="Вес, кг" value="0.5 кг">
+                <input type="text" class="parcel-field" placeholder="Д×Ш×В" value="20×15×10">
+            </div>
+        </div>
+
+        <a href="webview-sender.html" class="btn-calculate">Рассчитать доставку</a>
+
+        <!-- Results -->
+        <div class="results-section">
+            <div class="section-header">
+                <span class="section-title">Варианты доставки</span>
+                <span class="results-count">5 предложений</span>
+            </div>
+
+            <a href="webview-sender.html" class="offer-card best">
+                <div class="best-badge">Лучшая цена</div>
+                <div class="offer-header">
+                    <div class="offer-logo cdek">СДЭК</div>
+                    <div class="offer-info">
+                        <div class="offer-name">СДЭК Экспресс</div>
+                        <div class="offer-type">Курьер до двери</div>
+                    </div>
+                    <div class="offer-price">
+                        <div class="price-value">420 ₽</div>
+                        <div class="price-time">1-2 дня</div>
+                    </div>
+                </div>
+                <div class="offer-tags">
+                    <span class="offer-tag green">Быстро</span>
+                    <span class="offer-tag">Отслеживание</span>
+                </div>
+            </a>
+
+            <a href="webview-sender.html" class="offer-card">
+                <div class="offer-header">
+                    <div class="offer-logo pochta">Почта</div>
+                    <div class="offer-info">
+                        <div class="offer-name">Почта России</div>
+                        <div class="offer-type">Посылка 1 класса</div>
+                    </div>
+                    <div class="offer-price">
+                        <div class="price-value">289 ₽</div>
+                        <div class="price-time">3-5 дней</div>
+                    </div>
+                </div>
+                <div class="offer-tags">
+                    <span class="offer-tag green">Выгодно</span>
+                    <span class="offer-tag">100 000+ отделений</span>
+                </div>
+            </a>
+
+            <a href="webview-sender.html" class="offer-card">
+                <div class="offer-header">
+                    <div class="offer-logo dpd">DPD</div>
+                    <div class="offer-info">
+                        <div class="offer-name">DPD Classic</div>
+                        <div class="offer-type">Курьер до двери</div>
+                    </div>
+                    <div class="offer-price">
+                        <div class="price-value">450 ₽</div>
+                        <div class="price-time">2-3 дня</div>
+                    </div>
+                </div>
+                <div class="offer-tags">
+                    <span class="offer-tag">Страховка</span>
+                </div>
+            </a>
+        </div>
+
+        <div class="metaship-footer">
+            <div>Агрегатор служб доставки</div>
+            <div class="metaship-footer-logo">
+                <span>Powered by</span>
+                <strong>Metaship</strong>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

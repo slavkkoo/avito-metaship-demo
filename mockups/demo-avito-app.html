@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avito App — Metaship WebView Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .demo-title {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .demo-title h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .demo-title p {
+            opacity: 0.7;
+            font-size: 16px;
+        }
+
+        .phone-container {
+            position: relative;
+        }
+
+        /* iPhone Frame */
+        .iphone-frame {
+            width: 380px;
+            height: 780px;
+            background: #1a1a1a;
+            border-radius: 50px;
+            padding: 12px;
+            box-shadow:
+                0 0 0 3px #333,
+                0 20px 60px rgba(0,0,0,0.5),
+                inset 0 0 0 2px #2a2a2a;
+            position: relative;
+        }
+
+        /* Dynamic Island */
+        .dynamic-island {
+            position: absolute;
+            top: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 34px;
+            background: #000;
+            border-radius: 20px;
+            z-index: 100;
+        }
+
+        /* Screen */
+        .iphone-screen {
+            width: 100%;
+            height: 100%;
+            background: #f5f5f5;
+            border-radius: 40px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* iOS Status Bar */
+        .ios-status-bar {
+            height: 54px;
+            background: #00aaff;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding: 0 28px 8px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .status-time {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .status-icons {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+
+        .status-icons svg {
+            width: 18px;
+            height: 18px;
+            fill: white;
+        }
+
+        /* Avito Native Header */
+        .avito-header {
+            background: #00aaff;
+            padding: 12px 16px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avito-back {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .avito-back svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+
+        .avito-header-title {
+            flex: 1;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .avito-header-logo {
+            background: white;
+            color: #00aaff;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        /* WebView Label */
+        .webview-indicator {
+            background: rgba(102, 126, 234, 0.1);
+            border: 1px dashed #667eea;
+            margin: 8px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            color: #667eea;
+        }
+
+        .webview-indicator::before {
+            content: '🌐';
+        }
+
+        /* WebView Content Area */
+        .webview-container {
+            height: calc(100% - 54px - 68px - 70px);
+            overflow-y: auto;
+            background: #f5f5f5;
+        }
+
+        /* Avito Bottom Tab Bar */
+        .avito-tabs {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            padding-bottom: 20px;
+        }
+
+        .avito-tab {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            color: #999;
+            font-size: 10px;
+        }
+
+        .avito-tab.active {
+            color: #00aaff;
+        }
+
+        .avito-tab svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        /* Embedded Content */
+        .metaship-content {
+            padding: 0;
+        }
+
+        .product-card {
+            background: white;
+            margin: 12px;
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            gap: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .product-image {
+            width: 70px;
+            height: 70px;
+            background: #e0e0e0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 11px;
+        }
+
+        .product-info {
+            flex: 1;
+        }
+
+        .product-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .product-price {
+            font-size: 16px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .product-seller {
+            font-size: 12px;
+            color: #999;
+            margin-top: 4px;
+        }
+
+        .metaship-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 16px;
+            margin: 0 12px 12px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .metaship-logo {
+            width: 36px;
+            height: 36px;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #667eea;
+            font-size: 11px;
+        }
+
+        .metaship-text {
+            flex: 1;
+        }
+
+        .metaship-title {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .metaship-desc {
+            font-size: 11px;
+            opacity: 0.9;
+        }
+
+        .section {
+            background: white;
+            margin: 0 12px 12px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            padding: 14px 16px 10px;
+            color: #333;
+        }
+
+        .delivery-option {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            border-top: 1px solid #f0f0f0;
+            cursor: pointer;
+        }
+
+        .delivery-option:hover {
+            background: #fafafa;
+        }
+
+        .delivery-icon {
+            width: 42px;
+            height: 42px;
+            background: #f0f7ff;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+        }
+
+        .delivery-icon svg {
+            width: 22px;
+            height: 22px;
+            fill: #00aaff;
+        }
+
+        .delivery-info {
+            flex: 1;
+        }
+
+        .delivery-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .delivery-desc {
+            font-size: 12px;
+            color: #999;
+            margin-top: 2px;
+        }
+
+        .arrow {
+            width: 18px;
+            height: 18px;
+            fill: #ccc;
+        }
+
+        /* Legend */
+        .demo-legend {
+            margin-top: 30px;
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .legend-dot.native {
+            background: #00aaff;
+        }
+
+        .legend-dot.webview {
+            background: #667eea;
+        }
+
+        /* Annotations */
+        .annotation {
+            position: absolute;
+            background: rgba(255,255,255,0.95);
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            white-space: nowrap;
+        }
+
+        .annotation::before {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border: 8px solid transparent;
+        }
+
+        .annotation.left {
+            right: calc(100% + 20px);
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .annotation.left::before {
+            left: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            border-left-color: rgba(255,255,255,0.95);
+        }
+
+        .annotation.right {
+            left: calc(100% + 20px);
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .annotation.right::before {
+            right: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            border-right-color: rgba(255,255,255,0.95);
+        }
+
+        .annotation-native {
+            color: #00aaff;
+        }
+
+        .annotation-webview {
+            color: #667eea;
+        }
+
+        /* Navigation hint */
+        .nav-hint {
+            position: absolute;
+            bottom: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,255,255,0.1);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-hint a {
+            color: #00aaff;
+            text-decoration: none;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-title">
+        <h1>Metaship × Avito Integration</h1>
+        <p>WebView демонстрация в мобильном приложении</p>
+    </div>
+
+    <div class="phone-container">
+        <div class="iphone-frame">
+            <div class="dynamic-island"></div>
+            <div class="iphone-screen">
+                <!-- iOS Status Bar -->
+                <div class="ios-status-bar">
+                    <span class="status-time">9:41</span>
+                    <div class="status-icons">
+                        <svg viewBox="0 0 24 24"><path d="M12 21c1.66 0 3-1.34 3-3H9c0 1.66 1.34 3 3 3zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V3c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 4.36 6 6.92 6 10v5l-2 2v1h16v-1l-2-2z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+                    </div>
+                </div>
+
+                <!-- Avito Native Header -->
+                <div class="avito-header">
+                    <div class="avito-back">
+                        <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+                    </div>
+                    <div class="avito-header-title">Отправить товар</div>
+                    <div class="avito-header-logo">Avito</div>
+                </div>
+
+                <!-- Annotation: Native -->
+                <div class="annotation left annotation-native" style="top: 90px;">
+                    ← Нативный хедер Avito
+                </div>
+
+                <!-- WebView Content -->
+                <div class="webview-container">
+                    <div class="webview-indicator">
+                        WebView: metaship.ru/avito/delivery
+                    </div>
+
+                    <div class="metaship-content">
+                        <div class="product-card">
+                            <div class="product-image">Фото</div>
+                            <div class="product-info">
+                                <div class="product-title">iPhone 13 Pro Max 256GB</div>
+                                <div class="product-price">85 000 ₽</div>
+                                <div class="product-seller">Продавец: Алексей</div>
+                            </div>
+                        </div>
+
+                        <div class="metaship-badge">
+                            <div class="metaship-logo">MS</div>
+                            <div class="metaship-text">
+                                <div class="metaship-title">Metaship</div>
+                                <div class="metaship-desc">Агрегатор служб доставки</div>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">Выберите способ доставки</div>
+
+                            <div class="delivery-option">
+                                <div class="delivery-icon">
+                                    <svg viewBox="0 0 24 24"><path d="M18 18.5c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5-1.5.67-1.5 1.5.67 1.5 1.5 1.5zM19.5 9.5l1.96 2.5H17V9.5h2.5zM6 18.5c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5-1.5.67-1.5 1.5.67 1.5 1.5 1.5zM20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4z"/></svg>
+                                </div>
+                                <div class="delivery-info">
+                                    <div class="delivery-name">Курьерская доставка</div>
+                                    <div class="delivery-desc">СДЭК, Почта России, DPD</div>
+                                </div>
+                                <svg class="arrow" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+                            </div>
+
+                            <div class="delivery-option">
+                                <div class="delivery-icon">
+                                    <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                                </div>
+                                <div class="delivery-info">
+                                    <div class="delivery-name">Пункт выдачи</div>
+                                    <div class="delivery-desc">Самовывоз из ПВЗ</div>
+                                </div>
+                                <svg class="arrow" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+                            </div>
+                        </div>
+
+                        <div style="padding: 10px; text-align: center; color: #999; font-size: 11px;">
+                            Powered by Metaship
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Annotation: WebView -->
+                <div class="annotation right annotation-webview" style="top: 340px;">
+                    WebView контент Metaship →
+                </div>
+
+                <!-- Avito Bottom Tab Bar -->
+                <div class="avito-tabs">
+                    <div class="avito-tab">
+                        <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                        <span>Главная</span>
+                    </div>
+                    <div class="avito-tab">
+                        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+                        <span>Объявления</span>
+                    </div>
+                    <div class="avito-tab">
+                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
+                        <span>Подать</span>
+                    </div>
+                    <div class="avito-tab active">
+                        <svg viewBox="0 0 24 24"><path d="M21 8V7l-3 2-3-2v1l3 2 3-2zm1-5H2C.9 3 0 3.9 0 5v14c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM8 6c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm6 12H2v-1c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1zm8-6h-8V6h8v6z"/></svg>
+                        <span>Сообщения</span>
+                    </div>
+                    <div class="avito-tab">
+                        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                        <span>Профиль</span>
+                    </div>
+                </div>
+
+                <!-- Annotation: Native Tabs -->
+                <div class="annotation left annotation-native" style="bottom: 35px;">
+                    ← Нативный таб-бар Avito
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-hint">
+            Интерактивная версия: <a href="1-main.html">открыть флоу →</a>
+        </div>
+    </div>
+
+    <div class="demo-legend">
+        <div class="legend-item">
+            <div class="legend-dot native"></div>
+            <span>Нативный UI Avito</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-dot webview"></div>
+            <span>WebView (Metaship)</span>
+        </div>
+    </div>
+</body>
+</html>

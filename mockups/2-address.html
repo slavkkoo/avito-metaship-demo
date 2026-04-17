@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Откуда и куда</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            max-width: 430px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: #00aaff;
+            color: white;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .back-btn {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .back-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .section {
+            background: white;
+            margin: 12px;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .section-icon.from {
+            background: #e8f5e9;
+        }
+
+        .section-icon.from svg {
+            fill: #4caf50;
+        }
+
+        .section-icon.to {
+            background: #fff3e0;
+        }
+
+        .section-icon.to svg {
+            fill: #ff9800;
+        }
+
+        .section-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-label {
+            font-size: 13px;
+            color: #999;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            color: #333;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #00aaff;
+        }
+
+        .form-input::placeholder {
+            color: #bbb;
+        }
+
+        .parcel-section {
+            background: white;
+            margin: 12px;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .parcel-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .parcel-icon {
+            width: 40px;
+            height: 40px;
+            background: #f3e5f5;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .parcel-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: #9c27b0;
+        }
+
+        .dimensions-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .dimensions-row .form-group {
+            flex: 1;
+        }
+
+        .dimensions-row .form-input {
+            text-align: center;
+        }
+
+        .btn-calculate {
+            display: block;
+            width: calc(100% - 24px);
+            margin: 20px 12px;
+            padding: 16px;
+            background: #00aaff;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            transition: background 0.2s;
+        }
+
+        .btn-calculate:hover {
+            background: #0099ee;
+        }
+
+        .btn-calculate:active {
+            background: #0088dd;
+        }
+
+        .route-line {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: -8px 0;
+            position: relative;
+        }
+
+        .route-dots {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            padding: 8px 0;
+        }
+
+        .route-dot {
+            width: 4px;
+            height: 4px;
+            background: #ddd;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="1-main.html" class="back-btn">
+            <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        </a>
+        <div class="header-title">Расчёт доставки</div>
+    </div>
+
+    <div class="section">
+        <div class="section-header">
+            <div class="section-icon from">
+                <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            </div>
+            <div class="section-title">Откуда отправить</div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Город отправления</label>
+            <input type="text" class="form-input" placeholder="Например, Москва" value="Москва">
+        </div>
+        <div class="form-group">
+            <label class="form-label">Адрес (улица, дом)</label>
+            <input type="text" class="form-input" placeholder="Улица, дом, квартира" value="ул. Тверская, 1">
+        </div>
+    </div>
+
+    <div class="route-line">
+        <div class="route-dots">
+            <div class="route-dot"></div>
+            <div class="route-dot"></div>
+            <div class="route-dot"></div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-header">
+            <div class="section-icon to">
+                <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            </div>
+            <div class="section-title">Куда доставить</div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Город получения</label>
+            <input type="text" class="form-input" placeholder="Например, Санкт-Петербург" value="Санкт-Петербург">
+        </div>
+        <div class="form-group">
+            <label class="form-label">Адрес (улица, дом)</label>
+            <input type="text" class="form-input" placeholder="Улица, дом, квартира" value="Невский проспект, 28">
+        </div>
+    </div>
+
+    <div class="parcel-section">
+        <div class="parcel-header">
+            <div class="parcel-icon">
+                <svg viewBox="0 0 24 24"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18-.21 0-.41-.06-.57-.18l-7.9-4.44A.991.991 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18.21 0 .41.06.57.18l7.9 4.44c.32.17.53.5.53.88v9zM12 4.15L6.04 7.5 12 10.85l5.96-3.35L12 4.15zM5 15.91l6 3.38v-6.71L5 9.21v6.7zm14 0v-6.7l-6 3.37v6.71l6-3.38z"/></svg>
+            </div>
+            <div class="section-title">Параметры посылки</div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Вес (кг)</label>
+            <input type="number" class="form-input" placeholder="0.5" value="0.5" step="0.1">
+        </div>
+
+        <div class="dimensions-row">
+            <div class="form-group">
+                <label class="form-label">Длина (см)</label>
+                <input type="number" class="form-input" placeholder="20" value="20">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Ширина (см)</label>
+                <input type="number" class="form-input" placeholder="15" value="15">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Высота (см)</label>
+                <input type="number" class="form-input" placeholder="10" value="10">
+            </div>
+        </div>
+    </div>
+
+    <a href="3-offers.html" class="btn-calculate">Рассчитать стоимость</a>
+
+    <div style="padding: 0 12px 20px; text-align: center; color: #999; font-size: 12px;">
+        Powered by Metaship
+    </div>
+</body>
+</html>

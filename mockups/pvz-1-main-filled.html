@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Avito — Отправить посылку</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #f2f2f2;
+            min-height: 100vh;
+            max-width: 430px;
+            margin: 0 auto;
+            padding-bottom: 140px;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 20px;
+            font-size: 15px;
+            font-weight: 600;
+            background: #fff;
+        }
+
+        .status-icons {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        /* Header */
+        .header {
+            background: #fff;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .back-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .back-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: #141414;
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #141414;
+        }
+
+        /* Banner */
+        .banner {
+            background: linear-gradient(135deg, #00aaff 0%, #0099ee 100%);
+            margin: 12px;
+            border-radius: 16px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            color: #fff;
+        }
+
+        .banner-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .banner-icon svg {
+            width: 32px;
+            height: 32px;
+            fill: #fff;
+        }
+
+        .banner-text h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .banner-text p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* Main Card */
+        .main-card {
+            background: #fff;
+            margin: 0 12px 12px;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        /* Route Section */
+        .route-section {
+            padding: 20px;
+        }
+
+        .route-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px;
+            background: #f7f7f7;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+            text-decoration: none;
+        }
+
+        .route-item:hover {
+            background: #f0f0f0;
+        }
+
+        .route-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .route-item.filled {
+            background: #e8f5e9;
+            border: 2px solid #4caf50;
+        }
+
+        .route-item.filled.to {
+            background: #fff3e0;
+            border-color: #ff9800;
+        }
+
+        .route-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .route-icon.from {
+            background: #4caf50;
+        }
+
+        .route-icon.from svg {
+            fill: #fff;
+        }
+
+        .route-icon.to {
+            background: #ff9800;
+        }
+
+        .route-icon.to svg {
+            fill: #fff;
+        }
+
+        .route-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .route-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .route-label {
+            font-size: 13px;
+            color: #8e8e93;
+            margin-bottom: 2px;
+        }
+
+        .route-pvz {
+            font-size: 15px;
+            font-weight: 600;
+            color: #141414;
+            margin-bottom: 2px;
+        }
+
+        .route-address {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 2px;
+        }
+
+        .route-person {
+            font-size: 13px;
+            color: #8e8e93;
+        }
+
+        .route-arrow {
+            width: 20px;
+            height: 20px;
+            fill: #c7c7cc;
+        }
+
+        /* Divider with line */
+        .route-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: -6px 0 -6px 36px;
+            position: relative;
+        }
+
+        .route-divider::before {
+            content: '';
+            position: absolute;
+            left: 21px;
+            width: 2px;
+            height: 24px;
+            background: #e5e5e5;
+        }
+
+        /* Info Chips */
+        .info-chips {
+            display: flex;
+            gap: 8px;
+            padding: 0 20px 20px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .info-chips::-webkit-scrollbar {
+            display: none;
+        }
+
+        .info-chip {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 14px;
+            background: #f7f7f7;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #141414;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .info-chip:hover {
+            background: #f0f0f0;
+        }
+
+        .info-chip svg {
+            width: 16px;
+            height: 16px;
+            fill: #8e8e93;
+        }
+
+        /* Size Section */
+        .size-section {
+            padding: 20px;
+            border-top: 1px solid #f2f2f2;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #141414;
+            margin-bottom: 16px;
+        }
+
+        .size-cards {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .size-cards::-webkit-scrollbar {
+            display: none;
+        }
+
+        .size-card {
+            flex: 0 0 140px;
+            background: #f7f7f7;
+            border-radius: 14px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .size-card:hover {
+            background: #f0f0f0;
+        }
+
+        .size-card.selected {
+            background: #fff;
+            border-color: #00aaff;
+        }
+
+        .size-image {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        .size-image svg {
+            width: 50px;
+            height: 50px;
+            fill: #8e8e93;
+        }
+
+        .size-card.selected .size-image svg {
+            fill: #00aaff;
+        }
+
+        .size-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: #141414;
+            margin-bottom: 4px;
+        }
+
+        .size-desc {
+            font-size: 12px;
+            color: #8e8e93;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .size-price {
+            font-size: 16px;
+            font-weight: 700;
+            color: #141414;
+        }
+
+        .size-card.selected .size-price {
+            color: #00aaff;
+        }
+
+        /* Content Section */
+        .content-section {
+            padding: 0 20px 20px;
+        }
+
+        .content-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px;
+            background: #e8f5e9;
+            border: 2px solid #4caf50;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+            text-decoration: none;
+        }
+
+        .content-item:hover {
+            background: #c8e6c9;
+        }
+
+        .content-icon {
+            width: 44px;
+            height: 44px;
+            background: #4caf50;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .content-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: #fff;
+        }
+
+        .content-text {
+            flex: 1;
+        }
+
+        .content-label {
+            font-size: 16px;
+            font-weight: 500;
+            color: #141414;
+        }
+
+        .content-value {
+            font-size: 14px;
+            color: #666;
+            margin-top: 2px;
+        }
+
+        /* Insurance Section */
+        .insurance-section {
+            margin: 0 12px 12px;
+            background: #fff;
+            border-radius: 16px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .insurance-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .insurance-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: #fff;
+        }
+
+        .insurance-content {
+            flex: 1;
+        }
+
+        .insurance-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #141414;
+        }
+
+        .insurance-desc {
+            font-size: 13px;
+            color: #8e8e93;
+        }
+
+        .insurance-btn {
+            padding: 8px 14px;
+            background: #f7f7f7;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #00aaff;
+            cursor: pointer;
+        }
+
+        /* Bottom Bar */
+        .bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 430px;
+            background: #fff;
+            padding: 12px 16px;
+            padding-bottom: calc(12px + env(safe-area-inset-bottom));
+            box-shadow: 0 -2px 20px rgba(0,0,0,0.08);
+            z-index: 100;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .price-label {
+            font-size: 14px;
+            color: #8e8e93;
+        }
+
+        .price-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #141414;
+        }
+
+        .submit-btn {
+            width: 100%;
+            height: 56px;
+            padding: 0 24px;
+            background: linear-gradient(135deg, #00aaff 0%, #0095e0 100%);
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 170, 255, 0.3);
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #00bbff 0%, #00aaff 100%);
+            box-shadow: 0 6px 16px rgba(0, 170, 255, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(0, 170, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- Status Bar -->
+    <div class="status-bar">
+        <span>16:04</span>
+        <div class="status-icons">
+            <svg width="18" height="12" viewBox="0 0 18 12"><path d="M1 4h2v8H1V4zm4-2h2v10H5V2zm4-2h2v12H9V0zm4 4h2v8h-2V4zm4-2h2v10h-2V2z" fill="#141414"/></svg>
+            <svg width="17" height="12" viewBox="0 0 17 12"><path d="M8.5 2.5c2.7 0 5.2 1 7.1 2.7l-1.4 1.4c-1.5-1.3-3.5-2.1-5.7-2.1s-4.2.8-5.7 2.1L1.4 5.2c1.9-1.7 4.4-2.7 7.1-2.7z" fill="#141414"/></svg>
+            <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0" y="1" width="22" height="10" rx="2" stroke="#141414" stroke-width="1" fill="none"/><rect x="23" y="4" width="2" height="4" rx="1" fill="#141414"/><rect x="2" y="3" width="14" height="6" rx="1" fill="#141414"/></svg>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="back-btn">
+            <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        </div>
+        <div class="header-title">Отправить посылку</div>
+    </div>
+
+    <!-- Banner -->
+    <div class="banner">
+        <div class="banner-icon">
+            <svg viewBox="0 0 24 24"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18-.21 0-.41-.06-.57-.18l-7.9-4.44A.991.991 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18.21 0 .41.06.57.18l7.9 4.44c.32.17.53.5.53.88v9z"/></svg>
+        </div>
+        <div class="banner-text">
+            <h3>Доставка из ПВЗ в ПВЗ</h3>
+            <p>Выгодно и удобно по всей России</p>
+        </div>
+    </div>
+
+    <!-- Main Card -->
+    <div class="main-card">
+        <!-- Route Section -->
+        <div class="route-section">
+            <a href="pvz-2-map-from.html" class="route-item filled">
+                <div class="route-icon from">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                </div>
+                <div class="route-content">
+                    <div class="route-label">Отправитель</div>
+                    <div class="route-pvz">СДЭК</div>
+                    <div class="route-address">Москва, ул. Складочная, 1 стр. 5</div>
+                    <div class="route-person">+7 (968) 040-89-31</div>
+                </div>
+                <svg class="route-arrow" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+            </a>
+
+            <div class="route-divider"></div>
+
+            <a href="pvz-4-map-to.html" class="route-item filled to">
+                <div class="route-icon to">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                </div>
+                <div class="route-content">
+                    <div class="route-label">Получатель</div>
+                    <div class="route-pvz">СДЭК</div>
+                    <div class="route-address">СПб, Невский пр-т, 114-116</div>
+                    <div class="route-person">+7 (999) 123-45-67</div>
+                </div>
+                <svg class="route-arrow" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+            </a>
+        </div>
+
+        <!-- Info Chips -->
+        <div class="info-chips">
+            <div class="info-chip">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                <span>Про упаковку</span>
+            </div>
+            <div class="info-chip">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                <span>Как отправить</span>
+            </div>
+            <div class="info-chip">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                <span>Запрещённые вещи</span>
+            </div>
+        </div>
+
+        <!-- Size Section -->
+        <div class="size-section">
+            <div class="section-title">Размер посылки</div>
+            <div class="size-cards">
+                <div class="size-card" onclick="selectSize(this)">
+                    <div class="size-image">
+                        <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zM6 20V4h7v5h5v11H6z"/></svg>
+                    </div>
+                    <div class="size-name">Конверт А4</div>
+                    <div class="size-desc">до 0.5 кг, для документов</div>
+                    <div class="size-price">99 ₽</div>
+                </div>
+
+                <div class="size-card selected" onclick="selectSize(this)">
+                    <div class="size-image">
+                        <svg viewBox="0 0 24 24"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18-.21 0-.41-.06-.57-.18l-7.9-4.44A.991.991 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18.21 0 .41.06.57.18l7.9 4.44c.32.17.53.5.53.88v9z"/></svg>
+                    </div>
+                    <div class="size-name">Размер S</div>
+                    <div class="size-desc">до 2 кг, для мелочей</div>
+                    <div class="size-price">219 ₽</div>
+                </div>
+
+                <div class="size-card" onclick="selectSize(this)">
+                    <div class="size-image">
+                        <svg viewBox="0 0 24 24"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18-.21 0-.41-.06-.57-.18l-7.9-4.44A.991.991 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18.21 0 .41.06.57.18l7.9 4.44c.32.17.53.5.53.88v9z"/></svg>
+                    </div>
+                    <div class="size-name">Размер M</div>
+                    <div class="size-desc">до 5 кг, обувная коробка</div>
+                    <div class="size-price">289 ₽</div>
+                </div>
+
+                <div class="size-card" onclick="selectSize(this)">
+                    <div class="size-image">
+                        <svg viewBox="0 0 24 24"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18-.21 0-.41-.06-.57-.18l-7.9-4.44A.991.991 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18.21 0 .41.06.57.18l7.9 4.44c.32.17.53.5.53.88v9z"/></svg>
+                    </div>
+                    <div class="size-name">Размер L</div>
+                    <div class="size-desc">до 10 кг, крупные вещи</div>
+                    <div class="size-price">389 ₽</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Section -->
+        <div class="content-section">
+            <a href="pvz-6-content.html" class="content-item">
+                <div class="content-icon">
+                    <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                </div>
+                <div class="content-text">
+                    <div class="content-label">Что внутри</div>
+                    <div class="content-value">Смартфон iPhone 13 Pro • 85 000 ₽</div>
+                </div>
+                <svg class="route-arrow" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+            </a>
+        </div>
+    </div>
+
+    <!-- Insurance Section -->
+    <div class="insurance-section">
+        <div class="insurance-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+        </div>
+        <div class="insurance-content">
+            <div class="insurance-title">Возместим до 85 000 ₽</div>
+            <div class="insurance-desc">Страховка +120 ₽</div>
+        </div>
+        <div class="insurance-btn">Изменить</div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="bottom-bar">
+        <div class="price-row">
+            <span class="price-label">Стоимость доставки</span>
+            <span class="price-value">339 ₽</span>
+        </div>
+        <a href="pvz-7-confirm.html" class="submit-btn">Оформить заказ</a>
+    </div>
+
+    <script>
+        function selectSize(el) {
+            document.querySelectorAll('.size-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            el.classList.add('selected');
+        }
+    </script>
+</body>
+</html>

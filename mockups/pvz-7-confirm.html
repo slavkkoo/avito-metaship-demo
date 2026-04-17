@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Avito — Подтверждение заказа</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #f2f2f2;
+            min-height: 100vh;
+            max-width: 430px;
+            margin: 0 auto;
+            padding-bottom: 140px;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 20px;
+            font-size: 15px;
+            font-weight: 600;
+            background: #fff;
+        }
+
+        .status-icons {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        /* Header */
+        .header {
+            background: #fff;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .back-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .back-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: #141414;
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #141414;
+        }
+
+        /* Route Summary */
+        .route-summary {
+            background: #fff;
+            margin: 12px;
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .route-header {
+            font-size: 18px;
+            font-weight: 700;
+            color: #141414;
+            margin-bottom: 16px;
+        }
+
+        .route-points {
+            display: flex;
+            align-items: stretch;
+        }
+
+        .route-line {
+            width: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-right: 12px;
+        }
+
+        .route-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .route-dot.from {
+            background: #4caf50;
+        }
+
+        .route-dot.to {
+            background: #ff9800;
+        }
+
+        .route-connector {
+            flex: 1;
+            width: 2px;
+            background: #e5e5e5;
+            margin: 4px 0;
+        }
+
+        .route-details {
+            flex: 1;
+        }
+
+        .route-point {
+            margin-bottom: 16px;
+        }
+
+        .route-point:last-child {
+            margin-bottom: 0;
+        }
+
+        .route-label {
+            font-size: 13px;
+            color: #8e8e93;
+            margin-bottom: 4px;
+        }
+
+        .route-address {
+            font-size: 15px;
+            font-weight: 500;
+            color: #141414;
+            margin-bottom: 2px;
+        }
+
+        .route-name {
+            font-size: 14px;
+            color: #8e8e93;
+        }
+
+        /* Section */
+        .section {
+            background: #fff;
+            margin: 12px;
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #141414;
+            margin-bottom: 16px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f2f2f2;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .info-label {
+            font-size: 15px;
+            color: #8e8e93;
+        }
+
+        .info-value {
+            font-size: 15px;
+            font-weight: 500;
+            color: #141414;
+            text-align: right;
+        }
+
+        /* Parcel Card */
+        .parcel-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px;
+            background: #f7f7f7;
+            border-radius: 14px;
+        }
+
+        .parcel-icon {
+            width: 56px;
+            height: 56px;
+            background: #fff;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .parcel-icon svg {
+            width: 32px;
+            height: 32px;
+            fill: #00aaff;
+        }
+
+        .parcel-info {
+            flex: 1;
+        }
+
+        .parcel-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #141414;
+        }
+
+        .parcel-size {
+            font-size: 14px;
+            color: #8e8e93;
+            margin-top: 2px;
+        }
+
+        /* Payment Section */
+        .payment-section {
+            background: #fff;
+            margin: 12px;
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .payment-method {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px;
+            background: #f7f7f7;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .payment-method:hover {
+            background: #f0f0f0;
+        }
+
+        .payment-icon {
+            width: 48px;
+            height: 48px;
+            background: #fff;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .payment-icon svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        .payment-info {
+            flex: 1;
+        }
+
+        .payment-name {
+            font-size: 16px;
+            font-weight: 500;
+            color: #141414;
+        }
+
+        .payment-desc {
+            font-size: 14px;
+            color: #8e8e93;
+        }
+
+        .payment-arrow {
+            width: 20px;
+            height: 20px;
+            fill: #c7c7cc;
+        }
+
+        /* Insurance toggle */
+        .insurance-toggle {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding-top: 16px;
+            border-top: 1px solid #f2f2f2;
+            margin-top: 16px;
+        }
+
+        .insurance-info {
+            flex: 1;
+        }
+
+        .insurance-title {
+            font-size: 15px;
+            font-weight: 500;
+            color: #141414;
+        }
+
+        .insurance-desc {
+            font-size: 13px;
+            color: #8e8e93;
+        }
+
+        .toggle {
+            width: 51px;
+            height: 31px;
+            background: #e9e9eb;
+            border-radius: 16px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .toggle.active {
+            background: #00aaff;
+        }
+
+        .toggle::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 27px;
+            height: 27px;
+            background: #fff;
+            border-radius: 50%;
+            transition: transform 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .toggle.active::after {
+            transform: translateX(20px);
+        }
+
+        /* Bottom Bar */
+        .bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 430px;
+            background: #fff;
+            padding: 12px 16px;
+            padding-bottom: calc(12px + env(safe-area-inset-bottom));
+            box-shadow: 0 -2px 20px rgba(0,0,0,0.08);
+            z-index: 100;
+        }
+
+        .price-breakdown {
+            margin-bottom: 12px;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 0;
+        }
+
+        .price-row.total {
+            padding-top: 12px;
+            border-top: 1px solid #f2f2f2;
+            margin-top: 8px;
+        }
+
+        .price-label {
+            font-size: 14px;
+            color: #8e8e93;
+        }
+
+        .price-label.total {
+            font-size: 16px;
+            color: #141414;
+            font-weight: 600;
+        }
+
+        .price-value {
+            font-size: 14px;
+            color: #141414;
+        }
+
+        .price-value.total {
+            font-size: 22px;
+            font-weight: 700;
+            color: #141414;
+        }
+
+        .submit-btn {
+            width: 100%;
+            height: 56px;
+            padding: 0 24px;
+            background: linear-gradient(135deg, #00aaff 0%, #0095e0 100%);
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 170, 255, 0.3);
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #00bbff 0%, #00aaff 100%);
+            box-shadow: 0 6px 16px rgba(0, 170, 255, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(0, 170, 255, 0.3);
+        }
+
+        /* Agreement */
+        .agreement {
+            text-align: center;
+            padding: 12px 16px 0;
+            font-size: 12px;
+            color: #8e8e93;
+            line-height: 1.4;
+        }
+
+        .agreement a {
+            color: #00aaff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Status Bar -->
+    <div class="status-bar">
+        <span>16:08</span>
+        <div class="status-icons">
+            <svg width="18" height="12" viewBox="0 0 18 12"><path d="M1 4h2v8H1V4zm4-2h2v10H5V2zm4-2h2v12H9V0zm4 4h2v8h-2V4zm4-2h2v10h-2V2z" fill="#141414"/></svg>
+            <svg width="17" height="12" viewBox="0 0 17 12"><path d="M8.5 2.5c2.7 0 5.2 1 7.1 2.7l-1.4 1.4c-1.5-1.3-3.5-2.1-5.7-2.1s-4.2.8-5.7 2.1L1.4 5.2c1.9-1.7 4.4-2.7 7.1-2.7z" fill="#141414"/></svg>
+            <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0" y="1" width="22" height="10" rx="2" stroke="#141414" stroke-width="1" fill="none"/><rect x="23" y="4" width="2" height="4" rx="1" fill="#141414"/><rect x="2" y="3" width="14" height="6" rx="1" fill="#141414"/></svg>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+        <a href="pvz-6-content.html" class="back-btn">
+            <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        </a>
+        <div class="header-title">Подтверждение</div>
+    </div>
+
+    <!-- Route Summary -->
+    <div class="route-summary">
+        <div class="route-header">Маршрут</div>
+        <div class="route-points">
+            <div class="route-line">
+                <div class="route-dot from"></div>
+                <div class="route-connector"></div>
+                <div class="route-dot to"></div>
+            </div>
+            <div class="route-details">
+                <div class="route-point">
+                    <div class="route-label">Откуда</div>
+                    <div class="route-address">СДЭК, ул. Складочная, 1 стр. 5</div>
+                    <div class="route-name">Москва • Вячеслав Блинов</div>
+                </div>
+                <div class="route-point">
+                    <div class="route-label">Куда</div>
+                    <div class="route-address">СДЭК, Невский пр-т, 114-116</div>
+                    <div class="route-name">Санкт-Петербург • Получатель</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Parcel Section -->
+    <div class="section">
+        <div class="section-title">Посылка</div>
+        <div class="parcel-card">
+            <div class="parcel-icon">
+                <svg viewBox="0 0 24 24"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18-.21 0-.41-.06-.57-.18l-7.9-4.44A.991.991 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18.21 0 .41.06.57.18l7.9 4.44c.32.17.53.5.53.88v9z"/></svg>
+            </div>
+            <div class="parcel-info">
+                <div class="parcel-name">Смартфон iPhone 13 Pro</div>
+                <div class="parcel-size">Размер S • до 2 кг</div>
+            </div>
+        </div>
+
+        <div class="info-row" style="margin-top: 16px;">
+            <span class="info-label">Срок доставки</span>
+            <span class="info-value">2-3 дня</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Оценочная стоимость</span>
+            <span class="info-value">85 000 ₽</span>
+        </div>
+    </div>
+
+    <!-- Payment Section -->
+    <div class="payment-section">
+        <div class="section-title">Оплата</div>
+
+        <div class="payment-method">
+            <div class="payment-icon">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <rect x="2" y="5" width="20" height="14" rx="2" stroke="#141414" stroke-width="2"/>
+                    <path d="M2 10h20" stroke="#141414" stroke-width="2"/>
+                    <path d="M6 15h4" stroke="#141414" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <div class="payment-info">
+                <div class="payment-name">Банковская карта</div>
+                <div class="payment-desc">Visa, Mastercard, Мир</div>
+            </div>
+            <svg class="payment-arrow" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" fill="#c7c7cc"/></svg>
+        </div>
+
+        <div class="insurance-toggle">
+            <div class="insurance-info">
+                <div class="insurance-title">Страховка посылки</div>
+                <div class="insurance-desc">Возместим до 85 000 ₽</div>
+            </div>
+            <div class="toggle active" onclick="this.classList.toggle('active'); updatePrice()"></div>
+        </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="bottom-bar">
+        <div style="font-size: 14px; color: #8e8e93; margin-bottom: 12px; text-align: center;">Доставку оплачивает получатель при получении</div>
+        <div class="price-breakdown">
+            <div class="price-row">
+                <span class="price-label">Стоимость доставки для получателя</span>
+                <span class="price-value">219 ₽</span>
+            </div>
+            <div class="price-row" id="insuranceRow">
+                <span class="price-label">Стоимость страховки</span>
+                <span class="price-value">120 ₽</span>
+            </div>
+            <div class="price-row total">
+                <span class="price-label total">Итого для получателя</span>
+                <span class="price-value total" id="totalPrice">339 ₽</span>
+            </div>
+        </div>
+        <a href="pvz-8-success.html" class="submit-btn">Создать посылку</a>
+        <div class="agreement">
+            Нажимая «Создать посылку», вы соглашаетесь с <a href="#">условиями оферты</a> и <a href="#">политикой конфиденциальности</a>
+        </div>
+    </div>
+
+    <script>
+        function updatePrice() {
+            const toggle = document.querySelector('.toggle');
+            const insuranceRow = document.getElementById('insuranceRow');
+            const totalPrice = document.getElementById('totalPrice');
+            const submitBtn = document.querySelector('.submit-btn');
+
+            if (toggle.classList.contains('active')) {
+                insuranceRow.style.display = 'flex';
+                totalPrice.textContent = '339 ₽';
+            } else {
+                insuranceRow.style.display = 'none';
+                totalPrice.textContent = '219 ₽';
+            }
+        }
+    </script>
+</body>
+</html>
