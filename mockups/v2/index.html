@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avito Dostavka v2 - Mokapi</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #f5f5f7;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1d1d1f;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 17px;
+            color: #86868b;
+            margin-bottom: 40px;
+        }
+
+        .section {
+            background: #fff;
+            border-radius: 18px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .section-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #86868b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+        }
+
+        .screen-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .screen-link {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: #f5f5f7;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .screen-link:hover {
+            background: #e8e8ed;
+            transform: translateX(4px);
+        }
+
+        .screen-number {
+            width: 32px;
+            height: 32px;
+            background: #1d1d1f;
+            color: #fff;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .screen-number.alt {
+            background: #00aaff;
+        }
+
+        .screen-info {
+            flex: 1;
+        }
+
+        .screen-name {
+            font-size: 17px;
+            font-weight: 500;
+            color: #1d1d1f;
+            margin-bottom: 2px;
+        }
+
+        .screen-desc {
+            font-size: 14px;
+            color: #86868b;
+        }
+
+        .screen-arrow {
+            color: #86868b;
+            font-size: 20px;
+        }
+
+        .cjm-diagram {
+            background: #f5f5f7;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 16px;
+        }
+
+        .cjm-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 12px;
+        }
+
+        .cjm-flow {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .cjm-step {
+            background: #fff;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #1d1d1f;
+        }
+
+        .cjm-arrow {
+            color: #86868b;
+        }
+
+        .note {
+            background: #e8f5e9;
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 20px;
+        }
+
+        .note-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2e7d32;
+            margin-bottom: 4px;
+        }
+
+        .note-text {
+            font-size: 14px;
+            color: #2e7d32;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Avito Dostavka v2</h1>
+        <p class="subtitle">Obnovlyonnye mokapy - CJM podryadchika</p>
+
+        <div class="section">
+            <div class="section-title">Osnovnoy flou - otpravitel</div>
+            <div class="screen-list">
+                <a href="1-main.html" class="screen-link">
+                    <div class="screen-number">1</div>
+                    <div class="screen-info">
+                        <div class="screen-name">Glavnyy ekran (pustoy)</div>
+                        <div class="screen-desc">Vybor perevozchika, vvod marshruta i razmera</div>
+                    </div>
+                    <span class="screen-arrow">&rarr;</span>
+                </a>
+                <a href="2-map-from.html" class="screen-link">
+                    <div class="screen-number">2</div>
+                    <div class="screen-info">
+                        <div class="screen-name">Karta PVZ (otkuda)</div>
+                        <div class="screen-desc">Vybor punkta otpravleniya na karte</div>
+                    </div>
+                    <span class="screen-arrow">&rarr;</span>
+                </a>
+                <a href="3-pvz-list.html" class="screen-link">
+                    <div class="screen-number">3</div>
+                    <div class="screen-info">
+                        <div class="screen-name">Spisok PVZ</div>
+                        <div class="screen-desc">Poisk i vybor PVZ iz spiska</div>
+                    </div>
+                    <span class="screen-arrow">&rarr;</span>
+                </a>
+                <a href="4-sender.html" class="screen-link">
+                    <div class="screen-number">4</div>
+                    <div class="screen-info">
+                        <div class="screen-name">Dannye otpravitelya</div>
+                        <div class="screen-desc">Imya, familiya, telefon</div>
+                    </div>
+                    <span class="screen-arrow">&rarr;</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Osnovnoy flou - poluchatel</div>
+            <div class="screen-list">
+                <a href="2-map-to.html" class="screen-link">
+                    <div class="screen-number alt">2b</div>
+                    <div class="screen-info">
+                        <div class="screen-name">Karta PVZ (kuda)</div>
+                        <div class="screen-desc">Vybor punkta naznacheniya na karte</div>
+                    </div>
+                    <span class="screen-arrow">&rarr;</span>
+                </a>
+                <a href="4-recipient.html" class="screen-link">
+                    <div class="screen-number alt">4b</div>
+                    <div class="screen-info">
+                        <div class="screen-name">Dannye poluchatelya</div>
+                        <div class="screen-desc">Imya, familiya, telefon poluchatelya</div>
+                    </div>
+                    <span class="screen-arrow">&rarr;</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Zavershenie zakaza</div>
+            <div class="screen-list">
+                <a href="1-main-filled.html" class="screen-link">
+                    <div class="screen-number">5</div>
+                    <div class="screen-info">
+                        <div class="screen-name">Glavnyy ekran (zapolnen)</div>
+                        <div class="screen-desc">Gotovo k otpravke zakaza</div>
+                    </div>
+                    <span class="screen-arrow">&rarr;</span>
+                </a>
+                <a href="7-success.html" class="screen-link">
+                    <div class="screen-number">6</div>
+                    <div class="screen-info">
+                        <div class="screen-name">Uspekh</div>
+                        <div class="screen-desc">Zakaz sozdan, QR-kod</div>
+                    </div>
+                    <span class="screen-arrow">&rarr;</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Dopolnitelnye ekrany</div>
+            <div class="screen-list">
+                <a href="5-insurance.html" class="screen-link">
+                    <div class="screen-number">+</div>
+                    <div class="screen-info">
+                        <div class="screen-name">Strakhovka</div>
+                        <div class="screen-desc">Vvod stoimosti posylki dlya strakhovaniya</div>
+                    </div>
+                    <span class="screen-arrow">&rarr;</span>
+                </a>
+                <a href="6-delivery-details.html" class="screen-link">
+                    <div class="screen-number">+</div>
+                    <div class="screen-info">
+                        <div class="screen-name">Detali dostavki</div>
+                        <div class="screen-desc">Vybor razmera/vesa posylki</div>
+                    </div>
+                    <span class="screen-arrow">&rarr;</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="cjm-diagram">
+                <div class="cjm-title">CJM (Customer Journey Map)</div>
+                <div class="cjm-flow">
+                    <span class="cjm-step">1. Vybor perevozchika</span>
+                    <span class="cjm-arrow">&rarr;</span>
+                    <span class="cjm-step">2. Vybor PVZ otpravleniya</span>
+                    <span class="cjm-arrow">&rarr;</span>
+                    <span class="cjm-step">3. Dannye otpravitelya</span>
+                    <span class="cjm-arrow">&rarr;</span>
+                    <span class="cjm-step">4. Vybor PVZ polucheniya</span>
+                    <span class="cjm-arrow">&rarr;</span>
+                    <span class="cjm-step">5. Dannye poluchatelya</span>
+                    <span class="cjm-arrow">&rarr;</span>
+                    <span class="cjm-step">6. Podtverzhdenie</span>
+                    <span class="cjm-arrow">&rarr;</span>
+                    <span class="cjm-step">7. Uspekh</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="note">
+            <div class="note-title">Navigatsiya mezhdu ekranami</div>
+            <div class="note-text">
+                &bull; 1-main.html &rarr; 2-map-from.html (punkt otpravleniya) | 2-map-to.html (punkt naznacheniya) | 5-insurance.html<br>
+                &bull; 2-map-from.html &rarr; 1-main.html | 3-pvz-list.html | 4-sender.html<br>
+                &bull; 2-map-to.html &rarr; 1-main.html | 4-recipient.html<br>
+                &bull; 3-pvz-list.html &rarr; 2-map-from.html | 4-sender.html<br>
+                &bull; 4-sender.html &rarr; 2-map-from.html | 1-main-filled.html<br>
+                &bull; 4-recipient.html &rarr; 2-map-to.html | 1-main-filled.html<br>
+                &bull; 1-main-filled.html &rarr; 4-sender.html | 4-recipient.html | 5-insurance.html | 7-success.html<br>
+                &bull; 5-insurance.html &rarr; 1-main-filled.html<br>
+                &bull; 7-success.html &rarr; 1-main.html
+            </div>
+        </div>
+    </div>
+</body>
+</html>

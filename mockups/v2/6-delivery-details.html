@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Детали доставки</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: rgba(0,0,0,0.4);
+            min-height: 100vh;
+            max-width: 430px;
+            margin: 0 auto;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        /* Bottom Sheet Modal */
+        .modal {
+            width: 100%;
+            background: #fff;
+            border-radius: 20px 20px 0 0;
+            padding-bottom: env(safe-area-inset-bottom);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-handle {
+            width: 36px;
+            height: 5px;
+            background: #e5e5e5;
+            border-radius: 3px;
+            margin: 8px auto;
+        }
+
+        .modal-header {
+            padding: 8px 20px 20px;
+        }
+
+        .modal-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #141414;
+        }
+
+        /* Route Fields */
+        .route-section {
+            padding: 0 20px 20px;
+        }
+
+        .route-field {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #f7f7f7;
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 8px;
+        }
+
+        .route-field:last-child {
+            margin-bottom: 0;
+        }
+
+        .route-label {
+            font-size: 14px;
+            color: #8e8e93;
+            min-width: 50px;
+        }
+
+        .route-value {
+            flex: 1;
+            font-size: 16px;
+            color: #141414;
+        }
+
+        .route-clear {
+            width: 24px;
+            height: 24px;
+            background: #c7c7cc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .route-clear svg {
+            width: 14px;
+            height: 14px;
+            fill: #fff;
+        }
+
+        /* Size Section */
+        .size-section {
+            padding: 0 20px 20px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #141414;
+            margin-bottom: 16px;
+        }
+
+        .size-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .size-chip {
+            padding: 10px 16px;
+            background: #f7f7f7;
+            border-radius: 20px;
+            font-size: 15px;
+            color: #141414;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .size-chip:hover {
+            background: #f0f0f0;
+        }
+
+        .size-chip.selected {
+            background: #fff;
+            border-color: #00aaff;
+            color: #00aaff;
+        }
+
+        /* Size Preview */
+        .size-preview {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .size-image {
+            width: 200px;
+            height: 140px;
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .size-image svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .size-dimensions {
+            font-size: 14px;
+            color: #8e8e93;
+            margin-bottom: 8px;
+        }
+
+        .size-desc {
+            font-size: 15px;
+            color: #141414;
+        }
+
+        /* Submit */
+        .submit-section {
+            padding: 0 20px 24px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            height: 56px;
+            background: linear-gradient(135deg, #141414 0%, #2d2d2d 100%);
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #2d2d2d 0%, #3d3d3d 100%);
+        }
+    </style>
+</head>
+<body>
+    <div class="modal">
+        <div class="modal-handle"></div>
+
+        <div class="modal-header">
+            <div class="modal-title">Детали доставки</div>
+        </div>
+
+        <div class="route-section">
+            <div class="route-field">
+                <span class="route-label">откуда:</span>
+                <span class="route-value">Москва</span>
+                <div class="route-clear">
+                    <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                </div>
+            </div>
+            <div class="route-field">
+                <span class="route-label">куда:</span>
+                <span class="route-value">Санкт-Петербург</span>
+                <div class="route-clear">
+                    <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="size-section">
+            <div class="section-title">Размер посылки</div>
+            <div class="size-chips">
+                <div class="size-chip" onclick="selectSize(this, 'envelope')">Конверт А4</div>
+                <div class="size-chip" onclick="selectSize(this, 's')">S</div>
+                <div class="size-chip" onclick="selectSize(this, 'm')">M</div>
+                <div class="size-chip" onclick="selectSize(this, 'l')">L</div>
+                <div class="size-chip selected" onclick="selectSize(this, 'xl')">XL</div>
+                <div class="size-chip" onclick="selectSize(this, 'oversized20')">Негабарит до 20 кг</div>
+                <div class="size-chip" onclick="selectSize(this, 'oversized100')">Негабарит до 100 кг</div>
+            </div>
+        </div>
+
+        <div class="size-preview" id="sizePreview">
+            <div class="size-image">
+                <svg viewBox="0 0 200 140" fill="none">
+                    <!-- TV illustration -->
+                    <rect x="30" y="20" width="140" height="90" rx="4" fill="#E8E8E8" stroke="#C7C7CC" stroke-width="2"/>
+                    <rect x="40" y="30" width="120" height="70" rx="2" fill="#B8D4E8"/>
+                    <rect x="70" y="115" width="60" height="8" rx="2" fill="#C7C7CC"/>
+                    <!-- Dimensions -->
+                    <text x="100" y="8" text-anchor="middle" font-size="10" fill="#8e8e93">60 см</text>
+                    <text x="185" y="65" text-anchor="start" font-size="10" fill="#8e8e93">40 см</text>
+                    <text x="15" y="75" text-anchor="end" font-size="10" fill="#8e8e93">45 см</text>
+                </svg>
+            </div>
+            <div class="size-dimensions">60 × 40 × 45 см</div>
+            <div class="size-desc">Крупная коробка до 20 кг — по размеру примерно как микроволновка</div>
+        </div>
+
+        <div class="submit-section">
+            <a href="1-main.html" class="submit-btn">Готово</a>
+        </div>
+    </div>
+
+    <script>
+        const sizeData = {
+            envelope: {
+                dims: '32 × 23 × 1 см',
+                desc: 'Конверт А4 до 0,5 кг — для документов'
+            },
+            s: {
+                dims: '22 × 17 × 10 см',
+                desc: 'Маленькая коробка до 2 кг — для мелочей'
+            },
+            m: {
+                dims: '34 × 24 × 15 см',
+                desc: 'Средняя коробка до 5 кг — обувная коробка'
+            },
+            l: {
+                dims: '44 × 34 × 25 см',
+                desc: 'Большая коробка до 10 кг — небольшой чемодан'
+            },
+            xl: {
+                dims: '60 × 40 × 45 см',
+                desc: 'Крупная коробка до 20 кг — по размеру примерно как микроволновка'
+            },
+            oversized20: {
+                dims: 'До 150 × 70 × 70 см',
+                desc: 'То, что не влезет в коробку размера XL — небольшое кресло или средний чемодан'
+            },
+            oversized100: {
+                dims: 'До 200 × 100 × 100 см',
+                desc: 'Крупные вещи до 100 кг — диван, холодильник'
+            }
+        };
+
+        function selectSize(el, size) {
+            document.querySelectorAll('.size-chip').forEach(chip => {
+                chip.classList.remove('selected');
+            });
+            el.classList.add('selected');
+
+            const data = sizeData[size];
+            document.querySelector('.size-dimensions').textContent = data.dims;
+            document.querySelector('.size-desc').textContent = data.desc;
+        }
+    </script>
+</body>
+</html>
