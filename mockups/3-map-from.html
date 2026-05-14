@@ -21,7 +21,7 @@
             overflow: hidden;
         }
 
-        /* Map Container */
+        /* Map Container - Yandex Maps style */
         .map-container {
             position: fixed;
             top: 0;
@@ -30,9 +30,63 @@
             width: 100%;
             max-width: 430px;
             height: 100%;
-            background: #e5e3df;
-            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"><rect fill="%23e8e5e0" width="400" height="400"/><path d="M0 80h400M0 160h400M0 240h400M0 320h400" stroke="%23d4d1cc" stroke-width="1" fill="none"/><path d="M80 0v400M160 0v400M240 0v400M320 0v400" stroke="%23d4d1cc" stroke-width="1" fill="none"/><rect x="50" y="50" width="80" height="60" fill="%23c9c5c0" rx="2"/><rect x="180" y="100" width="100" height="80" fill="%23c9c5c0" rx="2"/><rect x="100" y="200" width="120" height="70" fill="%23c9c5c0" rx="2"/><rect x="270" y="180" width="90" height="100" fill="%23c9c5c0" rx="2"/><rect x="30" y="300" width="150" height="60" fill="%23c9c5c0" rx="2"/><path d="M0 150h150M200 150h200" stroke="%23fff" stroke-width="8"/><path d="M150 0v150M150 200v200" stroke="%23fff" stroke-width="8"/><path d="M0 280h120M180 280h220" stroke="%23fff" stroke-width="6"/><path d="M280 0v180M280 280v120" stroke="%23fff" stroke-width="6"/></svg>');
+            background: #f0ede8;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 430 932" preserveAspectRatio="xMidYMid slice">\
+                <!-- Base background -->\
+                <rect fill="%23f0ede8" width="430" height="932"/>\
+                \
+                <!-- Parks / Green areas -->\
+                <ellipse cx="50" cy="200" rx="80" ry="60" fill="%23c8e6c9" opacity="0.7"/>\
+                <ellipse cx="380" cy="350" rx="90" ry="70" fill="%23c8e6c9" opacity="0.6"/>\
+                <rect x="0" y="600" width="120" height="100" fill="%23c8e6c9" opacity="0.5" rx="20"/>\
+                <ellipse cx="200" cy="150" rx="40" ry="30" fill="%23c8e6c9" opacity="0.5"/>\
+                \
+                <!-- River / Water -->\
+                <path d="M-20 700 Q100 650, 180 680 Q280 720, 350 690 Q400 670, 450 700 L450 800 L-20 800 Z" fill="%23a8d4e6" opacity="0.6"/>\
+                \
+                <!-- Buildings / Blocks -->\
+                <rect x="80" y="100" width="60" height="45" fill="%23e0ddd8" rx="3"/>\
+                <rect x="160" y="85" width="80" height="55" fill="%23dddad5" rx="3"/>\
+                <rect x="260" y="110" width="55" height="40" fill="%23e0ddd8" rx="3"/>\
+                <rect x="340" y="80" width="70" height="50" fill="%23dddad5" rx="3"/>\
+                \
+                <rect x="30" y="250" width="90" height="60" fill="%23dddad5" rx="3"/>\
+                <rect x="150" y="230" width="70" height="50" fill="%23e0ddd8" rx="3"/>\
+                <rect x="250" y="250" width="85" height="55" fill="%23dddad5" rx="3"/>\
+                \
+                <rect x="60" y="380" width="100" height="70" fill="%23e0ddd8" rx="3"/>\
+                <rect x="190" y="360" width="75" height="60" fill="%23dddad5" rx="3"/>\
+                <rect x="300" y="390" width="90" height="65" fill="%23e0ddd8" rx="3"/>\
+                \
+                <rect x="20" y="500" width="80" height="55" fill="%23dddad5" rx="3"/>\
+                <rect x="130" y="480" width="95" height="70" fill="%23e0ddd8" rx="3"/>\
+                <rect x="260" y="510" width="70" height="50" fill="%23dddad5" rx="3"/>\
+                <rect x="350" y="490" width="60" height="60" fill="%23e0ddd8" rx="3"/>\
+                \
+                <!-- Main roads - white -->\
+                <path d="M0 200 L180 200 Q200 200, 200 220 L200 400" stroke="%23ffffff" stroke-width="12" fill="none"/>\
+                <path d="M200 400 Q200 420, 220 420 L430 420" stroke="%23ffffff" stroke-width="12" fill="none"/>\
+                <path d="M100 0 L100 180 Q100 200, 120 200" stroke="%23ffffff" stroke-width="10" fill="none"/>\
+                <path d="M320 0 L320 400 Q320 420, 340 420" stroke="%23ffffff" stroke-width="10" fill="none"/>\
+                \
+                <!-- Secondary roads -->\
+                <path d="M0 350 L150 350" stroke="%23ffffff" stroke-width="7" fill="none"/>\
+                <path d="M250 350 L430 350" stroke="%23ffffff" stroke-width="7" fill="none"/>\
+                <path d="M0 550 L200 550 Q220 550, 220 570 L220 650" stroke="%23ffffff" stroke-width="7" fill="none"/>\
+                <path d="M280 550 L430 550" stroke="%23ffffff" stroke-width="7" fill="none"/>\
+                \
+                <!-- Street labels style lines -->\
+                <path d="M50 300 L130 300" stroke="%23d0cdc8" stroke-width="1" fill="none"/>\
+                <path d="M280 300 L360 300" stroke="%23d0cdc8" stroke-width="1" fill="none"/>\
+                <path d="M150 450 L230 450" stroke="%23d0cdc8" stroke-width="1" fill="none"/>\
+                \
+                <!-- Metro stations -->\
+                <circle cx="200" cy="200" r="8" fill="%23e53935"/>\
+                <circle cx="320" cy="350" r="8" fill="%23e53935"/>\
+                <circle cx="100" cy="420" r="8" fill="%23e53935"/>\
+            </svg>');
             background-size: cover;
+            background-position: center;
         }
 
         /* Header */

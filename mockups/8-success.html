@@ -48,92 +48,15 @@
 
         /* Success Icon */
         .success-icon {
-            width: 140px;
-            height: 140px;
-            margin: 0 auto 32px;
+            width: 180px;
+            height: 200px;
+            margin: 0 auto 24px;
             position: relative;
         }
 
-        .checkmark-circle {
+        .success-icon-svg {
             width: 100%;
             height: 100%;
-            position: relative;
-        }
-
-        .checkmark-bg {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
-            border-radius: 32px;
-            transform: rotate(-10deg);
-        }
-
-        .checkmark-wave {
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 40px;
-        }
-
-        .wave-line {
-            position: absolute;
-            width: 40px;
-            height: 4px;
-            background: #93c5fd;
-            border-radius: 2px;
-            transform-origin: center;
-        }
-
-        .wave-line:nth-child(1) {
-            top: 0;
-            left: 0;
-            transform: rotate(-30deg);
-        }
-
-        .wave-line:nth-child(2) {
-            top: 12px;
-            left: 15px;
-            width: 30px;
-            transform: rotate(-20deg);
-        }
-
-        .wave-dot {
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            background: #93c5fd;
-            border-radius: 50%;
-            top: 24px;
-            right: 0;
-        }
-
-        .checkmark-svg {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 70px;
-            height: 70px;
-        }
-
-        .checkmark-svg path {
-            fill: none;
-            stroke: #fff;
-            stroke-width: 8;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            stroke-dasharray: 100;
-            stroke-dashoffset: 100;
-            animation: drawCheck 0.6s ease-out 0.3s forwards;
-        }
-
-        @keyframes drawCheck {
-            to {
-                stroke-dashoffset: 0;
-            }
         }
 
         /* Title */
@@ -273,9 +196,9 @@
         .btn-secondary {
             width: 100%;
             padding: 18px;
-            background: #f5f5f5;
+            background: #fff;
             color: #000;
-            border: none;
+            border: 1.5px solid #000;
             border-radius: 14px;
             font-size: 17px;
             font-weight: 600;
@@ -287,7 +210,7 @@
         }
 
         .btn-secondary:hover {
-            background: #ebebeb;
+            background: #f5f5f5;
         }
     </style>
 </head>
@@ -306,17 +229,52 @@
     <div class="content">
         <!-- Success Icon -->
         <div class="success-icon">
-            <div class="checkmark-circle">
-                <div class="checkmark-bg"></div>
-                <div class="checkmark-wave">
-                    <div class="wave-line"></div>
-                    <div class="wave-line"></div>
-                    <div class="wave-dot"></div>
-                </div>
-                <svg class="checkmark-svg" viewBox="0 0 70 70">
-                    <path d="M15 35 L30 50 L55 20"/>
-                </svg>
-            </div>
+            <svg class="success-icon-svg" viewBox="0 0 180 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Glow/Shadow -->
+                <defs>
+                    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                        <feGaussianBlur stdDeviation="8" result="blur"/>
+                        <feMerge>
+                            <feMergeNode in="blur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                    <linearGradient id="checkGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#6ee7a0"/>
+                        <stop offset="50%" style="stop-color:#4ade80"/>
+                        <stop offset="100%" style="stop-color:#22c55e"/>
+                    </linearGradient>
+                    <linearGradient id="checkBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#22c55e"/>
+                        <stop offset="100%" style="stop-color:#16a34a"/>
+                    </linearGradient>
+                </defs>
+
+                <!-- Blue wave lines -->
+                <path d="M30 45 Q50 35, 70 50" stroke="#a5d8ff" stroke-width="5" stroke-linecap="round" fill="none" opacity="0.8"/>
+                <path d="M45 60 Q60 52, 78 62" stroke="#74c0fc" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.7"/>
+                <circle cx="85" cy="72" r="4" fill="#74c0fc" opacity="0.6"/>
+
+                <!-- Shadow under checkmark -->
+                <ellipse cx="95" cy="185" rx="50" ry="12" fill="#22c55e" opacity="0.3" filter="url(#glow)"/>
+
+                <!-- Checkmark body - 3D effect -->
+                <g transform="translate(40, 55) rotate(-12)">
+                    <!-- Back shadow layer -->
+                    <rect x="5" y="5" width="100" height="120" rx="24" fill="#16a34a" opacity="0.3"/>
+
+                    <!-- Main checkmark body -->
+                    <rect x="0" y="0" width="100" height="120" rx="24" fill="url(#checkGradient)" stroke="url(#checkBorder)" stroke-width="3"/>
+
+                    <!-- Inner highlight -->
+                    <rect x="6" y="6" width="88" height="50" rx="20" fill="white" opacity="0.15"/>
+
+                    <!-- Checkmark -->
+                    <path d="M25 60 L42 80 L75 42" stroke="white" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" fill="none">
+                        <animate attributeName="stroke-dasharray" from="0 100" to="100 0" dur="0.5s" fill="freeze"/>
+                    </path>
+                </g>
+            </svg>
         </div>
 
         <!-- Title -->
