@@ -1,11 +1,202 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0; url=v2/1-main.html">
-    <title>Avito Доставка — Макеты v2</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avito Доставка — ПВЗ Mockups</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #8e8e93;
+            margin-bottom: 40px;
+        }
+
+        .flow-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #8e8e93;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+        }
+
+        .screens-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .screen-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 20px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border: 1px solid #e5e5e5;
+        }
+
+        .screen-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+            border-color: #000;
+        }
+
+        .screen-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background: #000;
+            color: #fff;
+            border-radius: 50%;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .screen-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #000;
+            margin-bottom: 4px;
+        }
+
+        .screen-desc {
+            font-size: 14px;
+            color: #8e8e93;
+            line-height: 1.4;
+        }
+
+        .start-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 32px;
+            background: #000;
+            color: #fff;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .start-btn:hover {
+            opacity: 0.85;
+        }
+
+        .start-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: #fff;
+        }
+
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e5e5;
+            font-size: 14px;
+            color: #8e8e93;
+        }
+
+        footer a {
+            color: #000;
+        }
+    </style>
 </head>
 <body>
-    <p>Перенаправление на <a href="v2/1-main.html">макеты v2</a>...</p>
+    <div class="container">
+        <h1>Avito Доставка</h1>
+        <p class="subtitle">Интерактивные мокапы сервиса доставки через ПВЗ</p>
+
+        <a href="1-main.html" class="start-btn">
+            <span>Начать демо</span>
+            <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+        </a>
+
+        <div style="margin-top: 60px;">
+            <h3 class="flow-title">Все экраны</h3>
+            <div class="screens-grid">
+                <a href="1-main.html" class="screen-card">
+                    <div class="screen-number">1</div>
+                    <div class="screen-title">Главный экран</div>
+                    <div class="screen-desc">Выбор службы доставки, ПВЗ и условия</div>
+                </a>
+
+                <a href="2-address-input.html" class="screen-card">
+                    <div class="screen-number">2</div>
+                    <div class="screen-title">Ввод адреса</div>
+                    <div class="screen-desc">Поиск адреса для отправки</div>
+                </a>
+
+                <a href="3-map-from.html" class="screen-card">
+                    <div class="screen-number">3</div>
+                    <div class="screen-title">Карта отправления</div>
+                    <div class="screen-desc">Выбор ПВЗ на карте</div>
+                </a>
+
+                <a href="4-sender.html" class="screen-card">
+                    <div class="screen-number">4</div>
+                    <div class="screen-title">Отправитель</div>
+                    <div class="screen-desc">Данные отправителя</div>
+                </a>
+
+                <a href="5-map-to.html" class="screen-card">
+                    <div class="screen-number">5</div>
+                    <div class="screen-title">Карта получения</div>
+                    <div class="screen-desc">Выбор ПВЗ получения</div>
+                </a>
+
+                <a href="6-recipient.html" class="screen-card">
+                    <div class="screen-number">6</div>
+                    <div class="screen-title">Получатель</div>
+                    <div class="screen-desc">Данные получателя</div>
+                </a>
+
+                <a href="7-main-filled.html" class="screen-card">
+                    <div class="screen-number">7</div>
+                    <div class="screen-title">Заполненная форма</div>
+                    <div class="screen-desc">Готово к отправке</div>
+                </a>
+
+                <a href="8-success.html" class="screen-card">
+                    <div class="screen-number">8</div>
+                    <div class="screen-title">Успех</div>
+                    <div class="screen-desc">Заказ создан</div>
+                </a>
+            </div>
+        </div>
+
+        <footer>
+            Дизайн на основе <a href="https://www.figma.com/design/YZG1mDJt19gxtgMtXdKmOX" target="_blank">Figma макета</a>
+        </footer>
+    </div>
 </body>
 </html>
